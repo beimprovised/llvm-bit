@@ -1,4 +1,7 @@
 TARGET_DIR=$HOME/working/build-llvm-ykt
+if [ -d "$OBJ_ROOT"]; then
+	source $HOME/working/dynamic-switch-llvm.sh
+fi
 if [ -d "$TARGET_DIR" ]; then
   # Control will enter here if $DIRECTORY exists.
 	cd $TARGET_DIR

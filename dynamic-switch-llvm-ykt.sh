@@ -1,7 +1,7 @@
 #!/bin/sh
 
-SRC_ROOT=/home/beimprovised/working/llvm-ykt
-OBJ_ROOT=/home/beimprovised/working/install-llvm-ykt
+SRC_ROOT=$HOME/working/llvm-ykt
+OBJ_ROOT=$HOME/working/install-llvm-ykt
 
 export SRC_ROOT
 export OBJ_ROOT

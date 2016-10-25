@@ -1,11 +1,12 @@
-substr="/home/beimprovised/working/install-llvm/usr/local"
-replace="/home/beimprovised/working/install-llvm"
+substr="$WORKING_PATH/install-llvm/usr/local"
+replace="$WORKING_PATH/install-llvm"
 
 IFS=':' read -ra ADDR <<< "$PATH"
 
 #while IFS=':' read -ra ADDR; do
 	for i in "${ADDR[@]}"; do
 		if [ ! "${i/$substr}" = "$i" ] ; then
+			echo $i;
 			PATH=${PATH/$i};	#echo $i;          # process "$i"
 		fi;
 	done

@@ -8,8 +8,8 @@ if ! [ "$WORKING_PATH" = "" ] ; then
         -DCMAKE_CXX_COMPILER=$ORIGINAL_OBJ_ROOT/bin/clang++ \
         -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="" \
         -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="" \
-        -DCMAKE_CXX_FLAGS="-std=c++11" \
-        -DLIBOMP_CFLAGS="-stdlib=libc++" \
+        -DCMAKE_CXX_FLAGS="-std=c++11" \ # fatal error: 'atomic' file not found
+        -DLIBOMP_CFLAGS="-stdlib=libc++" \ # fatal error: 'atomic' file not found
         -G "Unix Makefiles" \
         $WORKING_PATH/llvm;
 

@@ -101,90 +101,94 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 	export PATH
 
-	cuda_device="/usr/lib/nvidia-cuda-toolkit/libdevice" 
+	if ! [ "$1" = "" ]; then
 
-	# deal with LD_LIBRARY_PATH
-	ADDR=""
-	IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
-	for i in "${ADDR[@]}"; do
-		if [[ ! ( "${i/$original_obj_root}" = "$i" ) ]]; then
-			LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$obj_root}" = "$i" ) ]]; then
-			LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$original_build_root}" = "$i" ) ]]; then
-			LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$build_root}" = "$i" ) ]]; then
-			LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-		fi;
+		cuda_device="$1"	#"/usr/lib/nvidia-cuda-toolkit/libdevice" 
 
-		if [[ ! ( "${i/$cuda_device}" = "$i" ) ]]; then
-			LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-		fi;
-	done;
-	ADDR=""
-	tmp=""
-	IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
-	for i in "${ADDR[@]}"; do
-		if [[ ! ( "$i" = "" ) ]] ; then
-			if [ "$tmp" = "" ] ; then
-				tmp=$i
-			else
-				tmp=$tmp:$i
+		# deal with LD_LIBRARY_PATH
+		ADDR=""
+		IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
+		for i in "${ADDR[@]}"; do
+			if [[ ! ( "${i/$original_obj_root}" = "$i" ) ]]; then
+				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
-		fi;
-	done
-	if [ "$tmp" = "" ] ; then
-		LD_LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device
-	else
-		LD_LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
-	fi;
-	
-	export LD_LIBRARY_PATH
-
-	# deal with LIBRARY_PATH
-	ADDR=""
-	IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
-	for i in "${ADDR[@]}"; do
-		if ! [ "${i/$original_obj_root}" = "$i" ]; then
-			LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-		fi;
-		if ! [ "${i/$obj_root}" = "$i" ]; then
-			LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-		fi;
-		if ! [ "${i/$original_build_root}" = "$i" ]; then
-			LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-		fi;
-		if ! [ "${i/$build_root}" = "$i" ]; then
-			LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-		fi;
-
-		if ! [ "${i##$cuda_device}" = "$i" ]; then
-			LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-		fi;
-	done;
-	ADDR=""
-	tmp=""
-	IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
-	for i in "${ADDR[@]}"; do
-		if ! [ "$i" = "" ] ; then
-			if [ "$tmp" = "" ] ; then
-				tmp=$i
-			else
-				tmp=$tmp:$i
+			if [[ ! ( "${i/$obj_root}" = "$i" ) ]]; then
+				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
-		fi;
-	done
-	if [ "$tmp" = "" ] ; then
-		LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device
-	else
-		LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
-	fi;
-	
-	export LIBRARY_PATH
+			if [[ ! ( "${i/$original_build_root}" = "$i" ) ]]; then
+				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
+			fi;
+			if [[ ! ( "${i/$build_root}" = "$i" ) ]]; then
+				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
+			fi;
 
+			if [[ ! ( "${i/$cuda_device}" = "$i" ) ]]; then
+				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
+			fi;
+		done;
+		ADDR=""
+		tmp=""
+		IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
+		for i in "${ADDR[@]}"; do
+			if [[ ! ( "$i" = "" ) ]] ; then
+				if [ "$tmp" = "" ] ; then
+					tmp=$i
+				else
+					tmp=$tmp:$i
+				fi;
+			fi;
+		done
+		if [ "$tmp" = "" ] ; then
+			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device
+		else
+			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
+		fi;
+		
+		export LD_LIBRARY_PATH
+
+		# deal with LIBRARY_PATH
+		ADDR=""
+		IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
+		for i in "${ADDR[@]}"; do
+			if ! [ "${i/$original_obj_root}" = "$i" ]; then
+				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
+			fi;
+			if ! [ "${i/$obj_root}" = "$i" ]; then
+				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
+			fi;
+			if ! [ "${i/$original_build_root}" = "$i" ]; then
+				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
+			fi;
+			if ! [ "${i/$build_root}" = "$i" ]; then
+				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
+			fi;
+
+			if ! [ "${i##$cuda_device}" = "$i" ]; then
+				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
+			fi;
+		done;
+		ADDR=""
+		tmp=""
+		IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
+		for i in "${ADDR[@]}"; do
+			if ! [ "$i" = "" ] ; then
+				if [ "$tmp" = "" ] ; then
+					tmp=$i
+				else
+					tmp=$tmp:$i
+				fi;
+			fi;
+		done
+		if [ "$tmp" = "" ] ; then
+			LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device
+		else
+			LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
+		fi;
+		
+		export LIBRARY_PATH
+	else
+		echo "cuda libdevice path has not provided."
+	fi;
 else
 	echo "export WORKING_PATH first."
 fi;

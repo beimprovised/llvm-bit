@@ -6,3 +6,4 @@ For example:
 
 	source dynamic-switch-llvm-ykt.sh ./opt/nvidia/cuda-7.5/nvvm/libdevice
 
+	See wiki for more details

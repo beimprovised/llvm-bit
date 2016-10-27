@@ -192,3 +192,9 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 else
 	echo "export WORKING_PATH first."
 fi;
+
+#export OMPTARGET_LIBS=/home/hyang/install-llvm-ykt/lib	#<path to libomptarget project>/lib
+#export LIBOMP_LIB=/home/hyang/install-llvm-ykt/lib	#<path to libomp project>/runtime/p8build/src/
+#export LIBRARY_PATH=$OMPTARGET_LIBS:$LIBRARY_PATH
+#export LD_LIBRARY_PATH=$LIBOMP_LIB:$OMPTARGET_LIBS:/opt/nvidia/cuda/lib64:$LD_LIBRARY_PATH
+

@@ -1,0 +1,7 @@
+include/llvm/Config
+include/llvm/Support
+lib/clang/4.0.0/include
+lib/LTO
+projects/openmp/runtime/src
+tools/clang/include/clang/Config
+tools/clang/lib/Headers

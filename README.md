@@ -6,4 +6,4 @@ For example:
 
 	source dynamic-switch-llvm-ykt.sh /opt/nvidia/cuda
 
-	See wiki for more details
+See wiki for more details

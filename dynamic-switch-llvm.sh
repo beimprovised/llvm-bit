@@ -101,9 +101,10 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 
 	export PATH
 
-	if ! [ "$1" = "" ]; then
 
-		cuda_device="$1"	#"/usr/lib/nvidia-cuda-toolkit/libdevice" 
+	cuda_device="$1"	# "/usr/lib/nvidia-cuda-toolkit/libdevice" 
+	
+	if ! [ "$cuda_device" = "" ]; then
 
 		# deal with LD_LIBRARY_PATH
 		ADDR=""
@@ -187,8 +188,8 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 		
 		export LIBRARY_PATH
 	else
-		echo "cuda libdevice path has not provided."
+		echo "Cuda libdevice path has not provided."
 	fi;
 else
-	echo "export WORKING_PATH first."
+	echo "Export WORKING_PATH first."
 fi;

@@ -1,69 +1,74 @@
-cd llvm
+if ! [ "$WORKING_PATH" = "" ]; then
 
-echo "------- LLVM ----------"
+	cd $WORKING_PATH/llvm
 
-git pull --rebase
+	echo "------- LLVM ----------"
 
-echo "------- Clang ----------"
+	git pull --rebase
 
-cd tools/clang
+	echo "------- Clang ----------"
 
-git pull --rebase
+	cd $WORKING_PATH/tools/clang
 
-cd ../..
+	git pull --rebase
 
-echo "------- Polly ----------"
+	#cd ../..
 
-cd tools/polly
+	echo "------- Polly ----------"
 
-git pull --rebase
+	cd $WORKING_PATH/tools/polly
 
-cd ../..
+	git pull --rebase
 
-echo "------- Compiler-rt ----------"
+	#cd ../..
 
-cd projects/compiler-rt
+	echo "------- Compiler-rt ----------"
 
-git pull --rebase
+	cd $WORKING_PATH/projects/compiler-rt
 
-cd ../..
+	git pull --rebase
 
-echo "------- OpenMP ----------"
+	#cd ../..
 
-cd projects/openmp
+	echo "------- OpenMP ----------"
 
-git pull --rebase
+	cd $WORKING_PATH/projects/openmp
 
-cd ../..
+	git pull --rebase
 
-echo "------- libcxx ----------"
-cd $WORKING_PATH/llvm/projects/libcxx
+	#cd ../..
 
-git pull --rebase
+	echo "------- libcxx ----------"
+	cd $WORKING_PATH/llvm/projects/libcxx
+
+	git pull --rebase
 
 
-echo "------- libcxxabi ----------"
+	echo "------- libcxxabi ----------"
 
-cd projects/libcxxabi
+	cd $WORKING_PATH/projects/libcxxabi
 
-git pull --rebase
+	git pull --rebase
 
-cd $WORKING_PATH/llvm/projects/test-suite
+	cd $WORKING_PATH/llvm/projects/test-suite
 
-git pull --rebase
+	git pull --rebase
 
-echo "------- clang tools extra ----------"
-cd $WORKING_PATH/llvm/tools/clang/tools/clang-tools-extra
+	echo "------- clang tools extra ----------"
+	cd $WORKING_PATH/llvm/tools/clang/tools/clang-tools-extra
 
-git pull --rebase
+	git pull --rebase
 
-echo "prepare build directory ..."
-cd "$WORKING_PATH"
-if [ ! -d "build-llvm" ]; then
-        mkdir build-llvm #(in-tree build is not supported)
+	echo "prepare build directory ..."
+	cd "$WORKING_PATH"
+	if [ ! -d "build-llvm" ]; then
+		mkdir build-llvm #(in-tree build is not supported)
+	fi;
+	if [ ! -d "install-llvm" ]; then
+		mkdir install-llvm
+	fi;
+	cd build-llvm;
+
+else
+	echo "Give \$WORKING_PATH first."
 fi;
-if [ ! -d "install-llvm" ]; then
-        mkdir install-llvm
-fi;
-cd build-llvm;
-

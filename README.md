@@ -4,6 +4,6 @@ For example:
 
 	bash cmake-build-llvm-ykt.sh
 
-	source dynamic-switch-llvm-ykt.sh ./opt/nvidia/cuda
+	source dynamic-switch-llvm-ykt.sh /opt/nvidia/cuda
 
 	See wiki for more details

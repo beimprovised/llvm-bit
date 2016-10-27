@@ -1,3 +1,7 @@
+#!/bin/sh
+
+WORKING_PATH="$1" 
+
 if ! [ "$WORKING_PATH" = "" ]; then
 
 	cd $WORKING_PATH/llvm

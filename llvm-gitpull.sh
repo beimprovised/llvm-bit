@@ -246,7 +246,8 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 	if [ ! -d "install-llvm" ]; then
 		mkdir install-llvm
 	fi;
-	cd build-llvm;
+
+	cd "$WORKING_PATH"
 else
-	echo "Give \$WORKING_PATH first."
+	echo "Give \$WORKING_PATH from argument 1"
 fi;

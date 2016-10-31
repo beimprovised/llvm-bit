@@ -4,7 +4,7 @@ For example:
 
 	bash llvm-gitpull-bit.sh $PWD beimprovised llvm-bit
 	source dynamic-switch-llvm.sh /opt/nvidia/cuda
-	bash cmake-build-llvm-bit.sh
+	bash cmake-build-llvm-bit.sh $(which cmake) /opt/nvidia/cuda llvm-bit
 
 
 See wiki for more details

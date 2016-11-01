@@ -11,7 +11,7 @@ if [ -d "$WORKING_PATH" ]; then
 		fi;
 
 			cd "$BUILD_DIR"
-			cmake -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR -P cmake_install.cmake"	# "$WORKING_PATH/$RELATIVE_SOURCE_PATH"
+			cmake -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" -P cmake_install.cmake	# "$WORKING_PATH/$RELATIVE_SOURCE_PATH"
 	else
 		echo "Provide relative source path from argument 1."
 	fi;

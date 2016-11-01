@@ -1,18 +1,21 @@
-echo "cmake config ..."
-if ! [ "$WORKING_PATH" = "" ] ; then
+if [ -d "$WORKING_PATH" ]; then
+	if ! [ "$1" = "" ]; then
+		RELATIVE_SOURCE_PATH="$1"
+		BUILD_DIR="$WORKING_PATH/build-$RELATIVE_SOURCE_PATH"
+		if ! [ -d "$BUILD_DIR" ]; then
+			mkdir "$BUILD_DIR"
+		fi;
+		INSTALL_DIR="$WORKING_PATH/install-$RELATIVE_SOURCE_PATH"
+		if ! [ -d "$INSTALL_DIR" ]; then
+			mkdir "$INSTALL_DIR"
+		fi;
 
-        TARGET_DIR=$WORKING_PATH/build-llvm
-        if [ -d "$TARGET_DIR" ]; then
-          # Control will enter here if $DIRECTORY exists.
-                cd $TARGET_DIR
-
-		cmake -DCMAKE_INSTALL_PREFIX=$WORKING_PATH/install-llvm -P cmake_install.cmake
-        else
-                echo "can't find the directory \$TARGET_DIR"
-        fi;
-
+			cd "$BUILD_DIR"
+			cmake -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR -P cmake_install.cmake"	# "$WORKING_PATH/$RELATIVE_SOURCE_PATH"
+	else
+		echo "Provide relative source path from argument 1."
+	fi;
 else
-    echo "export WORKING_PATH first."
-
+	echo "Can't find directory \$WORKING_PATH from environment parameters."
 fi;
 

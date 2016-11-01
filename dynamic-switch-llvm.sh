@@ -1,21 +1,18 @@
 #!/bin/sh
-if [ ! "$WORKING_PATH" = "" ] ; then
-	ORIGINAL_SRC_ROOT=$WORKING_PATH/llvm
-	ORIGINAL_BUILD_ROOT=$WORKING_PATH/build-llvm
-	ORIGINAL_OBJ_ROOT=$WORKING_PATH/install-llvm
+RELATIVE_SOURCE_PATH_ORIGINAL=$1	# llvm
+RELATIVE_SOURCE_PATH=$2			# llvm-bit or llvm-ykt
+if ! ( [ "$RELATIVE_SOURCE_PATH_ORIGINAL" = "" ] || [ "$RELATIVE_SOURCE_PATH" = "" ] ); then
+if ! [ "$WORKING_PATH" = "" ] ; then
+	SRC_ROOT_ORIGINAL="$WORKING_PATH/$RELATIVE_SOURCE_PATH_ORIGINAL"
+	BUILD_ROOT_ORIGINAL="$WORKING_PATH/build-$RELATIVE_SOURCE_PATH_ORIGINAL"
+	OBJ_ROOT_ORIGINAL="$WORKING_PATH/install-$RELATIVE_SOURCE_PATH_ORIGINAL"
 
-	SRC_ROOT=$WORKING_PATH/llvm-ykt
-	BUILD_ROOT=$WORKING_PATH/build-llvm-ykt
-	OBJ_ROOT=$WORKING_PATH/install-llvm-ykt
+	SRC_ROOT="$WORKING_PATH/$RELATIVE_SOURCE_PATH"
+	BUILD_ROOT="$WORKING_PATH/build-$RELATIVE_SOURCE_PATH"
+	OBJ_ROOT="$WORKING_PATH/install-$RELATIVE_SOURCE_PATH"
 
 	export SRC_ROOT
 	export OBJ_ROOT
-
-
-	original_build_root="$ORIGINAL_BUILD_ROOT"
-	original_obj_root="$ORIGINAL_OBJ_ROOT"
-	build_root="$BUILD_ROOT"
-	obj_root="$OBJ_ROOT"
 
 	# http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash
 
@@ -24,16 +21,16 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 	IFS=':' read -ra ADDR <<< "$CPATH"
 	#while IFS=':' read -ra ADDR; do
 	for i in "${ADDR[@]}"; do
-		if [[ ! ( "${i/$original_obj_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ) ]]; then
 			CPATH=${CPATH/$i}; 
 		fi;
-		if [[ ! ( "${i/$obj_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$OBJ_ROOT}" = "$i" ) ]]; then
 			CPATH=${CPATH/$i}; 
 		fi;
-		if [[ ! ( "${i/$original_build_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ) ]]; then
 			CPATH=${CPATH/$i}; 
 		fi;
-		if [[ ! ( "${i/$build_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$BUILD_ROOT}" = "$i" ) ]]; then
 			CPATH=${CPATH/$i}; 
 		fi;
 
@@ -54,10 +51,10 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 	done
 	#done <<< "$CPATH";
 	if [ "$tmp" = "" ] ; then
-		CPATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin
+		CPATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
 #		CPATH=$OBJ_ROOT/include:$tmp
 	else
-		CPATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin:$tmp
+		CPATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin:$tmp
 #		CPATH=$OBJ_ROOT/include:$tmp
 	fi;
 
@@ -67,16 +64,16 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 	ADDR=""
 	IFS=':' read -ra ADDR <<< "$PATH"
 	for i in "${ADDR[@]}"; do
-		if [[ ! ( "${i/$original_obj_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ) ]]; then
 			PATH=${PATH/$i}; 
 		fi;
-		if [[ ! ( "${i/$obj_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$OBJ_ROOT}" = "$i" ) ]]; then
 			PATH=${PATH/$i}; 
 		fi;
-		if [[ ! ( "${i/$original_build_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ) ]]; then
 			PATH=${PATH/$i}; 
 		fi;
-		if [[ ! ( "${i/$build_root}" = "$i" ) ]]; then
+		if [[ ! ( "${i/$BUILD_ROOT}" = "$i" ) ]]; then
 			PATH=${PATH/$i}; 
 		fi;
 
@@ -94,36 +91,35 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 		fi;
 	done
 	if [ "$tmp" = "" ] ; then
-		PATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin
+		PATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
 	else
-		PATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin:$tmp
+		PATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin:$tmp
 	fi;
 
 	export PATH
 
+	if ! [ "$ACCELERATOR_TOOLKIT" = "" ]; then
 
-	cuda_device="$1"	# "/usr/lib/nvidia-cuda-toolkit/libdevice" 
-	
-	if ! [ "$cuda_device" = "" ]; then
+#		ACCELERATOR_TOOLKIT="$1"	#"/usr/lib/nvidia-cuda-toolkit/libdevice" 
 
 		# deal with LD_LIBRARY_PATH
 		ADDR=""
 		IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
 		for i in "${ADDR[@]}"; do
-			if [[ ! ( "${i/$original_obj_root}" = "$i" ) ]]; then
+			if [[ ! ( "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ) ]]; then
 				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
-			if [[ ! ( "${i/$obj_root}" = "$i" ) ]]; then
+			if [[ ! ( "${i/$OBJ_ROOT}" = "$i" ) ]]; then
 				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
-			if [[ ! ( "${i/$original_build_root}" = "$i" ) ]]; then
+			if [[ ! ( "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ) ]]; then
 				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
-			if [[ ! ( "${i/$build_root}" = "$i" ) ]]; then
+			if [[ ! ( "${i/$BUILD_ROOT}" = "$i" ) ]]; then
 				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
 
-			if [[ ! ( "${i/$cuda_device}" = "$i" ) ]]; then
+			if [[ ! ( "${i/$ACCELERATOR_TOOLKIT}" = "$i" ) ]]; then
 				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
 			fi;
 		done;
@@ -140,9 +136,9 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 			fi;
 		done
 		if [ "$tmp" = "" ] ; then
-			LD_LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device
+			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT
 		else
-			LD_LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
+			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT:$tmp
 		fi;
 		
 		export LD_LIBRARY_PATH
@@ -151,20 +147,20 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 		ADDR=""
 		IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
 		for i in "${ADDR[@]}"; do
-			if ! [ "${i/$original_obj_root}" = "$i" ]; then
+			if ! [ "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ]; then
 				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
 			fi;
-			if ! [ "${i/$obj_root}" = "$i" ]; then
+			if ! [ "${i/$OBJ_ROOT}" = "$i" ]; then
 				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
 			fi;
-			if ! [ "${i/$original_build_root}" = "$i" ]; then
+			if ! [ "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ]; then
 				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
 			fi;
-			if ! [ "${i/$build_root}" = "$i" ]; then
+			if ! [ "${i/$BUILD_ROOT}" = "$i" ]; then
 				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
 			fi;
 
-			if ! [ "${i##$cuda_device}" = "$i" ]; then
+			if ! [ "${i##$ACCELERATOR_TOOLKIT}" = "$i" ]; then
 				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
 			fi;
 		done;
@@ -181,15 +177,23 @@ if [ ! "$WORKING_PATH" = "" ] ; then
 			fi;
 		done
 		if [ "$tmp" = "" ] ; then
-			LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device
+			LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT
 		else
-			LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
+			LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT:$tmp
 		fi;
 		
 		export LIBRARY_PATH
 	else
-		echo "Cuda libdevice path has not provided."
+		echo "\$ACCELERATOR_TOOLKIT path has not provided."
 	fi;
 else
-	echo "Export WORKING_PATH first."
+	echo "export WORKING_PATH first."
 fi;
+else
+	echo "Provide \$RELATIVE_SOURCE_PATH_ORIGINAL and \$RELATIVE_SOURCE_PATH from arguments 1 and 2."
+fi;
+#export OMPTARGET_LIBS=/home/hyang/install-$RELATIVE_SOURCE_PATH/lib	#<path to libomptarget project>/lib
+#export LIBOMP_LIB=/home/hyang/install-$RELATIVE_SOURCE_PATH/lib	#<path to libomp project>/runtime/p8build/src/
+#export LIBRARY_PATH=$OMPTARGET_LIBS:$LIBRARY_PATH
+#export LD_LIBRARY_PATH=$LIBOMP_LIB:$OMPTARGET_LIBS:/opt/nvidia/cuda/lib64:$LD_LIBRARY_PATH
+

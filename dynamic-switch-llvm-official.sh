@@ -1,5 +1,5 @@
 #!/bin/sh
-if ! [ "$WORKING_PATH" = "" ] ; then
+if [ ! "$WORKING_PATH" = "" ] ; then
 	ORIGINAL_SRC_ROOT=$WORKING_PATH/llvm
 	ORIGINAL_BUILD_ROOT=$WORKING_PATH/build-llvm
 	ORIGINAL_OBJ_ROOT=$WORKING_PATH/install-llvm
@@ -54,10 +54,10 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 	done
 	#done <<< "$CPATH";
 	if [ "$tmp" = "" ] ; then
-		CPATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin
+		CPATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin
 #		CPATH=$OBJ_ROOT/include:$tmp
 	else
-		CPATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin:$tmp
+		CPATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin:$tmp
 #		CPATH=$OBJ_ROOT/include:$tmp
 	fi;
 
@@ -94,16 +94,17 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 		fi;
 	done
 	if [ "$tmp" = "" ] ; then
-		PATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin
+		PATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin
 	else
-		PATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin:$tmp
+		PATH=$ORIGINAL_OBJ_ROOT/include:$ORIGINAL_OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/bin:$tmp
 	fi;
 
 	export PATH
 
-	if ! [ "$1" = "" ]; then
 
-		cuda_device="$1"	#"/usr/lib/nvidia-cuda-toolkit/libdevice" 
+	cuda_device="$1"	# "/usr/lib/nvidia-cuda-toolkit/libdevice" 
+	
+	if ! [ "$cuda_device" = "" ]; then
 
 		# deal with LD_LIBRARY_PATH
 		ADDR=""
@@ -139,9 +140,9 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 			fi;
 		done
 		if [ "$tmp" = "" ] ; then
-			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device
+			LD_LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device
 		else
-			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
+			LD_LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
 		fi;
 		
 		export LD_LIBRARY_PATH
@@ -180,21 +181,15 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 			fi;
 		done
 		if [ "$tmp" = "" ] ; then
-			LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device
+			LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device
 		else
-			LIBRARY_PATH=$OBJ_ROOT/lib:$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
+			LIBRARY_PATH=$ORIGINAL_OBJ_ROOT/lib:$cuda_device:$tmp
 		fi;
 		
 		export LIBRARY_PATH
 	else
-		echo "cuda libdevice path has not provided."
+		echo "Cuda libdevice path has not provided."
 	fi;
 else
-	echo "export WORKING_PATH first."
+	echo "Export WORKING_PATH first."
 fi;
-
-#export OMPTARGET_LIBS=/home/hyang/install-llvm-ykt/lib	#<path to libomptarget project>/lib
-#export LIBOMP_LIB=/home/hyang/install-llvm-ykt/lib	#<path to libomp project>/runtime/p8build/src/
-#export LIBRARY_PATH=$OMPTARGET_LIBS:$LIBRARY_PATH
-#export LD_LIBRARY_PATH=$LIBOMP_LIB:$OMPTARGET_LIBS:/opt/nvidia/cuda/lib64:$LD_LIBRARY_PATH
-

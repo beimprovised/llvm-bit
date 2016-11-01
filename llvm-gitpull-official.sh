@@ -1,6 +1,8 @@
 #!/bin/bash
 # updated 2016-10-22
-WORKING_PATH="$1"		# $HOME/working
+# WORKING_PATH="$1"
+NOT_HAS_GIT_SVN="$1"	# ""
+
 if ! [ "$WORKING_PATH"  = "" ]; then
 	if [ ! -d "$WORKING_PATH" ]; then
 		mkdir $WORKING_PATH
@@ -19,19 +21,21 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master
-	if [ ! -d ".git/svn" ]; then
-	echo "llvm svn initializing ..."
-		git svn init https://llvm.org/svn/llvm-project/llvm/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l  # -l avoids fetching ahead of the git mirror.
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/llvm/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	fi;
 
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			echo "llvm svn initializing ..."
+			git svn init https://llvm.org/svn/llvm-project/llvm/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l  # -l avoids fetching ahead of the git mirror.
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/llvm/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
+	fi;
 
 
 
@@ -49,17 +53,20 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master
-	if [ ! -d ".git/svn" ]; then
-	echo "clang svn initializing ..."
-		git svn init https://llvm.org/svn/llvm-project/cfe/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/cfe/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+		echo "clang svn initializing ..."
+			git svn init https://llvm.org/svn/llvm-project/cfe/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/cfe/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	cd "$WORKING_PATH/llvm/projects"
@@ -75,16 +82,19 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/compiler-rt/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/compiler-rt/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+	
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/compiler-rt/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/compiler-rt/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	cd "$WORKING_PATH/llvm/projects"
@@ -100,16 +110,19 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/openmp/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else 
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/openmp/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/openmp/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else 
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/openmp/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	cd "$WORKING_PATH/llvm/projects"
@@ -125,16 +138,19 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/libcxx/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/libcxx/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+	
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/libcxx/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/libcxx/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	cd "$WORKING_PATH/llvm/projects"
@@ -150,18 +166,20 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/libcxxabi/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/libcxxabi/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+	
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/libcxxabi/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/libcxxabi/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
-
 
 	cd "$WORKING_PATH/llvm/projects"
 	echo "pull test-suite ..."
@@ -176,16 +194,19 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/test-suite/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/test-suite/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/test-suite/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/test-suite/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	cd "$WORKING_PATH/llvm/tools"
@@ -201,16 +222,19 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/polly/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/polly/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/polly/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/polly/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	cd "$WORKING_PATH/llvm/tools/clang/tools"
@@ -226,16 +250,19 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		git pull --rebase
 		git fetch
 		git checkout master 
-	if [ ! -d ".git/svn" ]; then
-		git svn init https://llvm.org/svn/llvm-project/clang-tools-extra/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
-	else
-		git config --unset-all svn-remote.svn.url
-		git config --unset-all svn-remote.svn.fetch
-		git svn init https://llvm.org/svn/llvm-project/clang-tools-extra/trunk --username=$whoami
-		git config svn-remote.svn.fetch :refs/remotes/origin/master
-		git svn rebase -l
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+			git svn init https://llvm.org/svn/llvm-project/clang-tools-extra/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/clang-tools-extra/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
 	fi;
 
 	echo "prepare build directory ..."

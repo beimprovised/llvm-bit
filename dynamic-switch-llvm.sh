@@ -18,82 +18,58 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 	# deal with CPATH
 	ADDR=""
-	IFS=':' read -ra ADDR <<< "$CPATH"
-	#while IFS=':' read -ra ADDR; do
-	for i in "${ADDR[@]}"; do
-		if [[ ! ( "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ) ]]; then
-			CPATH=${CPATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$OBJ_ROOT}" = "$i" ) ]]; then
-			CPATH=${CPATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ) ]]; then
-			CPATH=${CPATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$BUILD_ROOT}" = "$i" ) ]]; then
-			CPATH=${CPATH/$i}; 
-		fi;
-
-	done;
-	#done <<< "$CPATH";
-	ADDR=""
 	tmp=""
 	IFS=':' read -ra ADDR <<< "$CPATH"
 	#while IFS=':' read -ra ADDR; do
 	for i in "${ADDR[@]}"; do
-		if [[ ! ( "$i" = "" ) ]] ; then
+		if [[ ( "${i//$RELATIVE_SOURCE_PATH_ORIGINAL}" = "$i" ) && ( "${i//$RELATIVE_SOURCE_PATH}" = "$i" ) ]]; then
 			if [ "$tmp" = "" ] ; then
-				tmp=$i
+				tmp=$i;
+#				echo $i;
 			else
-				tmp=$tmp:$i
+				tmp=$tmp:$i;
+#				echo $i;
 			fi;
 		fi;
-	done
-	#done <<< "$CPATH";
+
+	done;
+	# done <<< "$CPATH";
+	append=""
+	append=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin	#:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
+	CPATH=""
 	if [ "$tmp" = "" ] ; then
-		CPATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
-#		CPATH=$OBJ_ROOT/include:$tmp
+		CPATH=$append
 	else
-		CPATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin:$tmp
-#		CPATH=$OBJ_ROOT/include:$tmp
+		CPATH=$append:$tmp
 	fi;
 
 	export CPATH
 
 	# deal with PATH
 	ADDR=""
+	tmp=""
 	IFS=':' read -ra ADDR <<< "$PATH"
+	#while IFS=':' read -ra ADDR; do
 	for i in "${ADDR[@]}"; do
-		if [[ ! ( "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ) ]]; then
-			PATH=${PATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$OBJ_ROOT}" = "$i" ) ]]; then
-			PATH=${PATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ) ]]; then
-			PATH=${PATH/$i}; 
-		fi;
-		if [[ ! ( "${i/$BUILD_ROOT}" = "$i" ) ]]; then
-			PATH=${PATH/$i}; 
+		if [[ ( "${i//$RELATIVE_SOURCE_PATH_ORIGINAL}" = "$i" ) && ( "${i//$RELATIVE_SOURCE_PATH}" = "$i" ) ]]; then
+			if [ "$tmp" = "" ] ; then
+				tmp=$i;
+#				echo $i;
+			else
+				tmp=$tmp:$i;
+#				echo $i;
+			fi;
 		fi;
 
 	done;
-	ADDR=""
-	tmp=""
-	IFS=':' read -ra ADDR <<< "$PATH"
-	for i in "${ADDR[@]}"; do
-		if [[ ! ( "$i" = "" ) ]] ; then
-			if [ "$tmp" = "" ] ; then
-				tmp=$i
-			else
-				tmp=$tmp:$i
-			fi;
-		fi;
-	done
+	# done <<< "$CPATH";
+	append=""
+	append=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin	#:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
+	PATH=""
 	if [ "$tmp" = "" ] ; then
-		PATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
+		PATH=$append
 	else
-		PATH=$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin:$tmp
+		PATH=$append:$tmp
 	fi;
 
 	export PATH
@@ -104,82 +80,54 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 		# deal with LD_LIBRARY_PATH
 		ADDR=""
-		IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
-		for i in "${ADDR[@]}"; do
-			if [[ ! ( "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ) ]]; then
-				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-			fi;
-			if [[ ! ( "${i/$OBJ_ROOT}" = "$i" ) ]]; then
-				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-			fi;
-			if [[ ! ( "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ) ]]; then
-				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-			fi;
-			if [[ ! ( "${i/$BUILD_ROOT}" = "$i" ) ]]; then
-				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-			fi;
-
-			if [[ ! ( "${i/$ACCELERATOR_TOOLKIT}" = "$i" ) ]]; then
-				LD_LIBRARY_PATH=${LD_LIBRARY_PATH/$i}; 
-			fi;
-		done;
-		ADDR=""
 		tmp=""
 		IFS=':' read -ra ADDR <<< "$LD_LIBRARY_PATH"
 		for i in "${ADDR[@]}"; do
-			if [[ ! ( "$i" = "" ) ]] ; then
+			if [[ ( "${i//$RELATIVE_SOURCE_PATH_ORIGINAL}" = "$i" ) && ( "${i//$RELATIVE_SOURCE_PATH}" = "$i" ) && ( "${i//$ACCELERATOR_TOOLKIT}" = "$i" ) ]]; then
 				if [ "$tmp" = "" ] ; then
-					tmp=$i
+					tmp=$i;
+#					echo $i;
 				else
-					tmp=$tmp:$i
+					tmp=$tmp:$i;
+#					echo $i;
 				fi;
 			fi;
-		done
+		done;
+		
+		append=""
+		append=$OBJ_ROOT/lib:$ACCELERATOR_TOOLKIT
+		LD_LIBRARY_PATH=""
 		if [ "$tmp" = "" ] ; then
-			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT
+			LD_LIBRARY_PATH=$append
 		else
-			LD_LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT:$tmp
+			LD_LIBRARY_PATH=$append:$tmp
 		fi;
 		
 		export LD_LIBRARY_PATH
 
 		# deal with LIBRARY_PATH
 		ADDR=""
-		IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
-		for i in "${ADDR[@]}"; do
-			if ! [ "${i/$OBJ_ROOT_ORIGINAL}" = "$i" ]; then
-				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-			fi;
-			if ! [ "${i/$OBJ_ROOT}" = "$i" ]; then
-				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-			fi;
-			if ! [ "${i/$BUILD_ROOT_ORIGINAL}" = "$i" ]; then
-				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-			fi;
-			if ! [ "${i/$BUILD_ROOT}" = "$i" ]; then
-				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-			fi;
-
-			if ! [ "${i##$ACCELERATOR_TOOLKIT}" = "$i" ]; then
-				LIBRARY_PATH=${LIBRARY_PATH/$i}; 
-			fi;
-		done;
-		ADDR=""
 		tmp=""
 		IFS=':' read -ra ADDR <<< "$LIBRARY_PATH"
 		for i in "${ADDR[@]}"; do
-			if ! [ "$i" = "" ] ; then
+			if [[ ( "${i//$RELATIVE_SOURCE_PATH_ORIGINAL}" = "$i" ) && ( "${i//$RELATIVE_SOURCE_PATH}" = "$i" ) && ( "${i//$ACCELERATOR_TOOLKIT}" = "$i" ) ]]; then
 				if [ "$tmp" = "" ] ; then
-					tmp=$i
+					tmp=$i;
+#					echo $i;
 				else
-					tmp=$tmp:$i
+					tmp=$tmp:$i;
+#					echo $i;
 				fi;
 			fi;
-		done
+		done;
+		append=""
+		append=$OBJ_ROOT/lib:$ACCELERATOR_TOOLKIT
+		LIBRARY_PATH=""
+
 		if [ "$tmp" = "" ] ; then
-			LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT
+			LIBRARY_PATH=$append
 		else
-			LIBRARY_PATH=$OBJ_ROOT/lib:$OBJ_ROOT_ORIGINAL/lib:$ACCELERATOR_TOOLKIT:$tmp
+			LIBRARY_PATH=$append:$tmp
 		fi;
 		
 		export LIBRARY_PATH

@@ -1,8 +1,11 @@
-CMAKE="$1"	# "/opt/cmake/bin/cmake"
+#!/bin/bash
+
+BUILD_PATH=$PWD
+CMAKE="$1"			# "/opt/cmake/bin/cmake"
 ACCELERATOR_TOOLKIT="$2"	# "/opt/nvidia/cuda"
 RELATIVE_SOURCE_PATH="$3"	# "llvm-bit"
 PROJECT_TYPE="$4"		# "Unix Makefiles"
-HOST_GCC="$5"		# ""
+HOST_GCC="$5"			# ""
 if [ -f "$CMAKE" ]; then
 	if [ -d "$ACCELERATOR_TOOLKIT" ]; then
 		if [ -d "$WORKING_PATH" ]; then
@@ -13,20 +16,20 @@ if [ -f "$CMAKE" ]; then
 
 					cd "$WORKING_PATH"
 
-					if ! [ -d "build-$RELATIVE_SOURCE_PATH" ]; then 
-						mkdir "build-$RELATIVE_SOURCE_PATH" 
-					fi;
+#					if ! [ -d "build-$RELATIVE_SOURCE_PATH" ]; then 
+#						mkdir "build-$RELATIVE_SOURCE_PATH" 
+#					fi;
 					if ! [ -d "install-$RELATIVE_SOURCE_PATH" ]; then 
 						mkdir "install-$RELATIVE_SOURCE_PATH" 
 					fi;
 
 					  # Control will enter here if $DIRECTORY exists.
-					cd "build-$RELATIVE_SOURCE_PATH"
+#					cd "build-$RELATIVE_SOURCE_PATH"
+					cd "$BUILD_PATH"
 					
-			#		cmake -DCMAKE_INSTALL_PREFIX="$WORKING_PATH/install-$RELATIVE_SOURCE_PATH -P cmake_install.cmake" \
 					$CMAKE -DCMAKE_INSTALL_PREFIX="$WORKING_PATH/install-$RELATIVE_SOURCE_PATH" \
 					-DCMAKE_OSX_ARCHITECTURES=x86_64 \
-					-DCMAKE_ASM_COMPILER=$(which cc) \
+					-DCMAKE_ASM_COMPILER=$(which clang) \
 					-DCUDA_TOOLKIT_ROOT_DIR="$ACCELERATOR_TOOLKIT" \
 					-DCMAKE_C_FLAGS="-DOPENMP_NVPTX_COMPUTE_CAPABILITY=37" \
 					-DLIBOMP_CFLAGS="-stdlib=libc++" \
@@ -37,7 +40,7 @@ if [ -f "$CMAKE" ]; then
 					-DCMAKE_CXX_COMPILER=$(which clang++) \
 					-DCMAKE_MAKE_PROGRAM=$(which make) \
 					-DCMAKE_CXX_EXTENSIONS=ON \
-					-DCMAKE_CXX_COMPILER_FLAGS="-L -std=c++11" \
+\#					-DCMAKE_CXX_COMPILER_FLAGS="-L -std=c++11" \
 					-DCMAKE_CXX_LINK_FLAGS="-L${HOST_GCC}/lib64 -Wl,-rpath,${HOST_GCC}/lib64" \
 					-DLLVM_ENABLE_ASSERTIONS=ON \
 					-DLLVM_ENABLE_WERROR=ON \
@@ -45,9 +48,11 @@ if [ -f "$CMAKE" ]; then
 					-DLLVM_ENABLE_LIBCXX=ON \
 					-DBUILD_SHARED_LIBS=OFF \
 					-DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITY=37 \
-					-DCHECK_CXX_SOURCE_COMPILES=ON \
+\#					-DCHECK_CXX_SOURCE_COMPILES=ON \
 					-G "$PROJECT_TYPE" \
-					"$WORKING_PATH/$RELATIVE_SOURCE_PATH"
+					"$WORKING_PATH/$RELATIVE_SOURCE_PATH";
+#					make -j$(nproc);
+#					cmake -DCMAKE_INSTALL_PREFIX="$WORKING_PATH/install-$RELATIVE_SOURCE_PATH" -P cmake_install.cmake; \
 				else
 					echo "Provide \$PROJECT_TYPE from argument 4."
 				fi;

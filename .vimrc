@@ -134,16 +134,17 @@
 		let d.vimproject = {'type': 'git', 'url': 'git://github.com/shemerey/vim-project.git'}
 		let d.backgroundcmd = {'type': 'git', 'url': 'git://github.com/MarcWeber/vim-addon-background-cmd.git'}
 		let d.local_vimrc = {'type': 'git', 'url': 'git://github.com/LucHermitte/local_vimrc.git'}
-		let d.sessions = {'type': 'git', 'url': 'git@github.com:edsono/vim-sessions.git'}
+		let d.sessions = {'type': 'git', 'url': 'https://github.com/edsono/vim-sessions.git'}
 		let d.build_tools = {'type': 'git', 'url': 'git://github.com/LucHermitte/vim-build-tools-wrapper.git'}
 		let d.code_pull = {'type': 'git', 'url': 'git://github.com/kasandell/Code-Pull.git'}
-		let d.cmake = {'type': 'git', 'url': 'git://github.com/po1/vim-pycmake.git'}
+		let d.pycmake = {'type': 'git', 'url': 'git://github.com/po1/vim-pycmake.git'}
 		let d.openproject = {'type': 'git', 'url': 'git://github.com/rscarvalho/OpenProject.vim.git'}
 		let d.projectrc = {'type': 'git', 'url': 'git://github.com/mattolenik/vim-projectrc.git'}
 		let d.project_tags = {'type': 'git', 'ulr': 'git://github.com/still-dreaming-1/vim-project-tags.git'}
-		let d.nerdtree_tabs = {'type': 'git', 'ulr': 'git@github.com:jistr/vim-nerdtree-tabs.git'}
-		let d.unite_outline = {'type': 'git', 'url': 'git@github.com:Shougo/unite-outline.git'}
-		let d.ctags = {'type': 'git', 'url': 'git@github.com:szw/vim-tags.git'}
+		let d.nerdtree_tabs = {'type': 'git', 'ulr': 'git://github.com/jistr/vim-nerdtree-tabs.git'}
+		let d.unite_outline = {'type': 'git', 'url': 'git://github.com/Shougo/unite-outline.git'}
+		let d.ctags = {'type': 'git', 'url': 'git://github.com/szw/vim-tags.git'}
+		" let d.ctags = {'type': 'git', 'url': 'https://github.com/vim-scripts/ctags.vim.git'}
 	    return d
 	endfun
 
@@ -173,8 +174,8 @@
 		\  'align',
 		\  'sqlutil',
 		\  'vorax',
-		\  'taglist',
 		\  'nerdtree',
+		\  'taglist',
 		\  'vimux',
 		\  'nerd_tree',
 		\  'genutils',
@@ -189,7 +190,6 @@
 		\  'sessions',
 		\  'build_tools',
 		\  'code_pull',
-		\  'cmake',
 		\  'openproject',
 		\  'projectrc',
 		\  'unite_outline',
@@ -207,3 +207,19 @@
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 	let g:NERDTreeDirArrowExpandable = '▸'
 	let g:NERDTreeDirArrowCollapsible = '▾'
+
+set exrc
+set secure
+
+let g:vim_tags_auto_generate = 1
+let g:vim_tags_ctags_binary = system("${which ctags}")
+let g:vim_tags_project_tags_command = "{CTAGS} -R {OPTIONS} {DIRECTORY} 2>/dev/null"
+let g:vim_tags_gems_tags_command = "{CTAGS} -R {OPTIONS} `bundle show --paths` 2>/dev/null"
+let g:vim_tags_use_vim_dispatch = 0
+let g:vim_tags_use_language_field = 1
+let g:vim_tags_ignore_files = ['.gitignore', '.svnignore', '.cvsignore']
+let g:vim_tags_ignore_file_comment_pattern = '^[#"]'
+let g:vim_tags_directories = [".git", ".hg", ".svn", ".bzr", "_darcs", "CVS"]
+let g:vim_tags_main_file = 'tags'
+let g:vim_tags_extension = '.tags'
+let g:vim_tags_cache_dir = expand($HOME)

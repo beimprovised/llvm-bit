@@ -40,7 +40,6 @@ if [ -f "$CMAKE" ]; then
 					-DCMAKE_CXX_COMPILER=$(which clang++) \
 					-DCMAKE_MAKE_PROGRAM=$(which make) \
 					-DCMAKE_CXX_EXTENSIONS=ON \
-\#					-DCMAKE_CXX_COMPILER_FLAGS="-L -std=c++11" \
 					-DCMAKE_CXX_LINK_FLAGS="-L${HOST_GCC}/lib64 -Wl,-rpath,${HOST_GCC}/lib64" \
 					-DLLVM_ENABLE_ASSERTIONS=ON \
 					-DLLVM_ENABLE_WERROR=ON \
@@ -48,7 +47,6 @@ if [ -f "$CMAKE" ]; then
 					-DLLVM_ENABLE_LIBCXX=ON \
 					-DBUILD_SHARED_LIBS=OFF \
 					-DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITY=37 \
-\#					-DCHECK_CXX_SOURCE_COMPILES=ON \
 					-G "$PROJECT_TYPE" \
 					"$WORKING_PATH/$RELATIVE_SOURCE_PATH";
 #					make -j$(nproc);

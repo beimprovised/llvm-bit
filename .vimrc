@@ -144,6 +144,7 @@
 		let d.nerdtree_tabs = {'type': 'git', 'ulr': 'git://github.com/jistr/vim-nerdtree-tabs.git'}
 		let d.unite_outline = {'type': 'git', 'url': 'git://github.com/Shougo/unite-outline.git'}
 		let d.ctags = {'type': 'git', 'url': 'git://github.com/szw/vim-tags.git'}
+		let d.powerline = {'type': 'git', 'url': 'git://github.com/powerline/powerline.git'}
 		" let d.ctags = {'type': 'git', 'url': 'https://github.com/vim-scripts/ctags.vim.git'}
 	    return d
 	endfun
@@ -194,6 +195,7 @@
 		\  'projectrc',
 		\  'unite_outline',
 		\  'ctags',
+		\  'powerline',
 		\  'xptemplate'], {'auto_install' : 0})
 	endfun
 	call ActivateAddonsExt()	

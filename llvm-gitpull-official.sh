@@ -1,7 +1,19 @@
 #!/bin/bash
 # updated 2016-10-22
 # WORKING_PATH="$1"
-NOT_HAS_GIT_SVN="$1"	# ""
+
+NOT_HAS_GIT_SVN="$2"	# ""
+
+if [ "$NOT_HAS_GIT_SVN" = "" ]; then
+	echo "No git-svn synchonization specified."
+fi;
+
+LLVM_SOURCE_ROOT="$1"
+
+if [ "$LLVM_SOURCE_ROOT" = "" ]; then
+	echo "No source root specified. Use ./llvm"
+	LLVM_SOURCE_ROOT="llvm"
+fi;
 
 if ! [ "$WORKING_PATH"  = "" ]; then
 	if [ ! -d "$WORKING_PATH" ]; then
@@ -9,12 +21,12 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 	fi;
 
 	cd "$WORKING_PATH"
-	if [ ! -d "$WORKING_PATH/llvm" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT" ]; then
 		git clone http://llvm.org/git/llvm.git
 	fi;
 
 	echo "pull llvm ..."
-	cd "$WORKING_PATH/llvm"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT"
 	if [ ! -d ".git" ]; then
 		git remote add origin http://llvm.org/git/llvm.git
 	fi;
@@ -41,8 +53,8 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 
 	# If you have clang too:
 	echo "pull clang ..."
-	cd "$WORKING_PATH/llvm/tools"
-	if [ ! -d "$WORKING_PATH/llvm/tools/clang" ]; then
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang" ]; then
 		git clone http://llvm.org/git/clang.git
 	fi;
 	cd clang
@@ -69,9 +81,39 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/projects"
+	# If you have clang too:
+	echo "pull lldb ..."
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/lldb" ]; then
+		git clone http://llvm.org/git/lldb.git
+	fi;
+	cd lldb
+	if [ ! -d ".git" ]; then
+		git remote add origin http://llvm.org/git/lldb.git
+		#git clone http://llvm.org/git/lldb.git llvm/tools/lldb
+	fi;
+		git pull --rebase
+		git fetch
+		git checkout master
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+		echo "clang svn initializing ..."
+			git svn init https://llvm.org/svn/llvm-project/lldb/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/lldb/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
+	fi;
+
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull compiler-rt ..."
-	if [ ! -d "$WORKING_PATH/llvm/projects/compiler-rt" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/compiler-rt" ]; then
 		git clone http://llvm.org/git/compiler-rt.git
 	fi;
 	cd compiler-rt
@@ -97,9 +139,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/projects"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull openmp ..."
-	if [ ! -d "$WORKING_PATH/llvm/projects/openmp" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/openmp" ]; then
 		git clone http://llvm.org/git/openmp.git
 	fi;
 	cd openmp
@@ -125,9 +167,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/projects"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull libcxx ..."
-	if [ ! -d "$WORKING_PATH/llvm/projects/libcxx" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/libcxx" ]; then
 		git clone http://llvm.org/git/libcxx.git
 	fi;
 	cd libcxx
@@ -153,9 +195,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/projects"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull libcxxabi ..."
-	if [ ! -d "$WORKING_PATH/llvm/projects/libcxxabi" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/libcxxabi" ]; then
 		git clone http://llvm.org/git/libcxxabi.git
 	fi;
 	cd libcxxabi
@@ -181,9 +223,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/projects"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull test-suite ..."
-	if [ ! -d "$WORKING_PATH/llvm/projects/test-suite" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/test-suite" ]; then
 		git clone http://llvm.org/git/test-suite.git
 	fi;
 	cd test-suite
@@ -209,9 +251,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/tools"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
 	echo "pull polly ..."
-	if [ ! -d "$WORKING_PATH/llvm/tools/polly" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/polly" ]; then
 		git clone http://llvm.org/git/polly.git
 	fi;
 	cd polly
@@ -237,9 +279,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-	cd "$WORKING_PATH/llvm/tools/clang/tools"
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools"
 	echo "pull clang-tools-extra ..."
-	if [ ! -d "$WORKING_PATH/llvm/tools/clang/tools/clang-tools-extra" ]; then
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools/clang-tools-extra" ]; then
 		git clone http://llvm.org/git/clang-tools-extra	 # svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
 	fi;
 	cd clang-tools-extra
@@ -267,14 +309,14 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 
 	echo "prepare build directory ..."
 	cd "$WORKING_PATH"
-	if [ ! -d "build-llvm" ]; then
-		mkdir build-llvm #(in-tree build is not supported)
+	if [ ! -d "build-$LLVM_SOURCE_ROOT" ]; then
+		mkdir "build-$LLVM_SOURCE_ROOT" #(in-tree build is not supported)
 	fi;
-	if [ ! -d "install-llvm" ]; then
-		mkdir install-llvm
+	if [ ! -d "install-$LLVM_SOURCE_ROOT" ]; then
+		mkdir "install-$LLVM_SOURCE_ROOT"
 	fi;
 
 	cd "$WORKING_PATH"
 else
-	echo "Give \$WORKING_PATH from argument 1"
+	echo "Export \$WORKING_PATH to make sure under where you want to create the source tree."
 fi;

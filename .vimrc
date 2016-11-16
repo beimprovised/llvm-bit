@@ -143,9 +143,11 @@
 		let d.project_tags = {'type': 'git', 'ulr': 'git://github.com/still-dreaming-1/vim-project-tags.git'}
 		let d.nerdtree_tabs = {'type': 'git', 'ulr': 'git://github.com/jistr/vim-nerdtree-tabs.git'}
 		let d.unite_outline = {'type': 'git', 'url': 'git://github.com/Shougo/unite-outline.git'}
-		let d.ctags = {'type': 'git', 'url': 'git://github.com/szw/vim-tags.git'}
-		let d.powerline = {'type': 'git', 'url': 'git://github.com/powerline/powerline.git'}
+		" let d.ctags = {'type': 'git', 'url': 'git://github.com/szw/vim-tags.git'}
 		" let d.ctags = {'type': 'git', 'url': 'https://github.com/vim-scripts/ctags.vim.git'}
+		let d.ctags = {'type': 'git', 'url': 'https://github.com/majutsushi/ctags.git'}
+		let d.powerline = {'type': 'git', 'url': 'git://github.com/powerline/powerline.git'}
+		let d.tagbar = {'type': 'git', 'url': 'https://github.com/majutsushi/tagbar.git'}
 	    return d
 	endfun
 
@@ -196,6 +198,7 @@
 		\  'unite_outline',
 		\  'ctags',
 		\  'powerline',
+		\  'tagbar',
 		\  'xptemplate'], {'auto_install' : 0})
 	endfun
 	call ActivateAddonsExt()	
@@ -225,3 +228,4 @@ let g:vim_tags_directories = [".git", ".hg", ".svn", ".bzr", "_darcs", "CVS"]
 let g:vim_tags_main_file = 'tags'
 let g:vim_tags_extension = '.tags'
 let g:vim_tags_cache_dir = expand($HOME)
+nmap <F8> :TagbarToggle<CR>

@@ -1,5 +1,14 @@
 echo "cmake config ..."
+
+
+#PYTHON_PATH=$(which python)//"/bin/python"
+#	-DPYTHON_EXECUTABLE:FILEPATH=$(which python) \
+#	-DPYTHON_INCLUDE_DIR:PATH=$PYTHON_PATH \
+#	-DPYTHON_LIBRARY:FILEPATH=$PYTHON_PATH/lib64 \
+#	-DPYTHON_LIBRARY_DEBUG:FILEPATH=PYTHON_LIBRARY_DEBUG-NOTFOUND \
+
 if ! [ "$WORKING_PATH" = "" ] ; then
+
 
         cmake -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/install-llvm \
         -DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
@@ -11,7 +20,10 @@ if ! [ "$WORKING_PATH" = "" ] ; then
         -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
         -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
         -DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
-        -G "Unix Makefiles" \
+	-DLLVM_ENABLE_DOXYGEN:BOOL=ON \
+	-DLLVM_BUILD_DOCS:BOOL=ON \
+	-DLLDB_DISABLE_PYTHON:BOOL=ON \
+	-G "Unix Makefiles" \
         "$WORKING_PATH/llvm";
 
 else

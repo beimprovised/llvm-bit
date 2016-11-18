@@ -45,7 +45,13 @@ if [ -f "$CMAKE" ]; then
 					-DLLVM_ENABLE_WERROR:BOOL=ON \
 					-DLLVM_ENABLE_BACKTRACES:BOOL=ON \
 					-DLLVM_ENABLE_LIBCXX:BOOL=ON \
-					-DBUILD_SHARED_LIBS:BOOL=OFF \
+					-DBUILD_SHARED_LIBS:BOOL=ON \
+					-DLLVM_ENABLE_LIBCXX:BOOL=ON ${IFS#//Use libc++ if available.}\
+					-DLIBCXX_CXX_ABI:STRING="libcxxabi" \
+					-DLLVM_TOOL_LIBCXXABI_BUILD:BOOL=ON ${IFS#//Whether to build libcxxabi as part of LLVM}\
+					-DLLVM_TOOL_LIBCXX_BUILD:BOOL=ON ${IFS#//Whether to build libcxx as part of LLVM}\
+					-DLLVM_EXTERNAL_LIBCXXABI_SOURCE_DIR:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxxabi"   ${IFS#//Path to libcxxabi source directory}\
+					-DLLVM_EXTERNAL_LIBCXX_SOURCE_DIR:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxx"      ${IFS#//Path to libcxx source directory}\
 					-DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITY:STRING="37" \
 					-G "$PROJECT_TYPE" \
 					"$WORKING_PATH/$RELATIVE_SOURCE_PATH";

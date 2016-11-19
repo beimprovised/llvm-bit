@@ -35,7 +35,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 							if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" = "$PWD" ]; then
 								cd "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
 							fi;
-							if [ "$PWD" = "$WORKING_PAT/$BUILD_PATH_PREFIX-llvm" ]; then
+							if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
 								$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-llvm \
 								-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
 								-DLLVM_ENABLE_LIBCXX:BOOL=ON \

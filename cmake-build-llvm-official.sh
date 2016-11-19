@@ -29,10 +29,12 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 						if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
 
-							if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"]; then
+							if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
 								mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
 							fi;
-							cd "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
+							if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" = "$PWD" ]; then
+								cd "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
+							fi;
 							if [ "$PWD" = "$WORKING_PAT/$BUILD_PATH_PREFIX-llvm" ]; then
 								$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-llvm \
 								-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \

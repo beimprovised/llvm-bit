@@ -11,9 +11,9 @@ CMAKE=$1
 SOURCE_PATH_PREFIX=$2
 BUILD_PATH_PREFIX=$3
 INSTALL_PATH_PREFIX=$4
-
-DOXYGEN_DOT_EXECUTABLE=$5 	#/usr/bin/dot
-DOXYGEN_EXECUTABLE=$6 		#/usr/bin/doxygen
+COMPILER_SWITCH=$5
+DOXYGEN_DOT_EXECUTABLE=$6 	#/usr/bin/dot
+DOXYGEN_EXECUTABLE=$7 		#/usr/bin/doxygen
 
 if ! [ "$WORKING_PATH" = "" ] ; then
 
@@ -24,48 +24,66 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 			if ! [ "$BUILD_PATH_PREFIX" = "" ] ; then
 
 				if ! [ "$INSTALL_PATH_PREFIX" = "" ] ; then
-
-					if ! [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
-
-						if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
-
-							if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
-								mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
-							fi;
-							if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" = "$PWD" ]; then
-								cd "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
-							fi;
-							if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
-								$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-llvm \
-								-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
-								-DLLVM_ENABLE_LIBCXX:BOOL=ON \
-								-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
-								-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
-								-DCMAKE_C_COMPILER:FILEPATH=$(which clang) \
-								-DCMAKE_CXX_COMPILER:FILEPATH=$(which clang++) \
-								-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
-								-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
-								-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
-								-DLLVM_ENABLE_DOXYGEN:BOOL=ON \
-								-DLLVM_BUILD_DOCS:BOOL=ON \
-								-DLLDB_DISABLE_PYTHON:BOOL=ON \
-								-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE \
-								-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE `#install-doxygen/bin/doxygen` \
-							`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \
-								-DCMAKE_BUILD_TYPE:STRING="Debug" \
-								-G "Unix Makefiles" \
-								"$WORKING_PATH/$SOURCE_PATH_PREFIX";
-							else
-								echo "Have not entered destination. Operation failed."
-							fi;
-						else		
-							echo "Provide \$DOXYGEN_EXECUTABLE from argument 6, please."
+					CC=""
+					CPP=""
+					if ! [ "$COMPILER_SWITCH" = "" ]; then
+						if [ "$COMPILER_SWITCH" = "gnu" ]; then
+							CC="gcc"
+							CPP="g++"
+						fi;
+						if [ "$COMPILER_SWITCH" = "llvm" ]; then
+							CC="clang"
+							CPP="clang++"
 						fi;
 
-					else
-						echo "Provide \$DOXYGEN_DOT_EXECUTABLE from argument 5, please."
-					fi;
+						if [[ ( "$CC" != "" ) && ( "$CPP" != "" ) ]]; then
 
+							if ! [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
+
+								if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
+
+									if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
+										mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
+									fi;
+									if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" = "$PWD" ]; then
+										cd "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
+									fi;
+									if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
+										$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-llvm \
+										-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
+										-DLLVM_ENABLE_LIBCXX:BOOL=ON \
+										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
+										-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
+										-DCMAKE_C_COMPILER:FILEPATH=$(which CC) \
+										-DCMAKE_CXX_COMPILER:FILEPATH=$(which CPP) \
+										-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
+										-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
+										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
+										-DLLVM_ENABLE_DOXYGEN:BOOL=ON \
+										-DLLVM_BUILD_DOCS:BOOL=ON \
+										-DLLDB_DISABLE_PYTHON:BOOL=ON \
+										-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE \
+										-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE `#install-doxygen/bin/doxygen` \
+									`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \
+										-DCMAKE_BUILD_TYPE:STRING="Debug" \
+										-G "Unix Makefiles" \
+										"$WORKING_PATH/$SOURCE_PATH_PREFIX";
+									else
+										echo "Have not entered destination. Operation failed."
+									fi;
+								else		
+									echo "Provide \$DOXYGEN_EXECUTABLE from argument 7, please."
+								fi;
+
+							else
+								echo "Provide \$DOXYGEN_DOT_EXECUTABLE from argument 6, please."
+							fi;
+						else
+							echo "Compiler type unkown, please check it again."
+						fi;
+					else
+						echo "Provide \$COMPILER_SWITCH (gnu or llvm) from argument 5, please."
+					fi;
 				else
 					echo "Provide \$INSTALL_PATH_PREFIX from argument 4, please."
 				fi;
@@ -80,7 +98,6 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 	    echo "Provide \$CMAKE from argument 1, please."
 
 	fi;
-
 else
     echo "Export \$WORKING_PATH first."
 

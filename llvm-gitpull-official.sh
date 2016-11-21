@@ -2,16 +2,15 @@
 # updated 2016-10-22
 # WORKING_PATH="$1"
 
+LLVM_SOURCE_ROOT="$1"
 NOT_HAS_GIT_SVN="$2"	# ""
 
 if [ "$NOT_HAS_GIT_SVN" = "" ]; then
 	echo "No git-svn synchonization specified."
 fi;
 
-LLVM_SOURCE_ROOT="$1"
-
 if [ "$LLVM_SOURCE_ROOT" = "" ]; then
-	echo "No source root specified. Use ./llvm"
+	echo "No source root specified. Use \"llvm\""
 	LLVM_SOURCE_ROOT="llvm"
 fi;
 

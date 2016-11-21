@@ -76,7 +76,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 								fi;
 
 							else
-								echo "Provide \$DOXYGEN_DOT_EXECUTABLE from argument 6, please."
+								echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself) from argument 6, please."
 							fi;
 						else
 							echo "Compiler type unkown, please check it again."

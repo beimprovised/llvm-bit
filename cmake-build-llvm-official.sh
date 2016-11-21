@@ -8,7 +8,7 @@ echo "cmake config ..."
 #	-DPYTHON_LIBRARY_DEBUG:FILEPATH=PYTHON_LIBRARY_DEBUG-NOTFOUND \
 
 CMAKE=$1
-SOURCE_PATH_PREFIX=$2
+SOURCE_PATH=$2
 BUILD_PATH_PREFIX=$3
 INSTALL_PATH_PREFIX=$4
 COMPILER_SWITCH=$5
@@ -19,7 +19,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 	if ! [ "$CMAKE" = "" ] ; then
 
-		if ! [ "$SOURCE_PATH_PREFIX" = "" ] ; then
+		if ! [ "$SOURCE_PATH" = "" ] ; then
 
 			if ! [ "$BUILD_PATH_PREFIX" = "" ] ; then
 
@@ -67,7 +67,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 									`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \
 										-DCMAKE_BUILD_TYPE:STRING="Debug" \
 										-G "Unix Makefiles" \
-										"$WORKING_PATH/$SOURCE_PATH_PREFIX";
+										"$WORKING_PATH/$SOURCE_PATH";
 									else
 										echo "Have not entered destination. Operation failed."
 									fi;
@@ -82,16 +82,16 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 							echo "Compiler type unkown, please check it again."
 						fi;
 					else
-						echo "Provide \$COMPILER_SWITCH (gnu or llvm) from argument 5, please."
+						echo "Provide \$COMPILER_SWITCH (e.g.: \"gnu\" or \"llvm\") from argument 5, please."
 					fi;
 				else
-					echo "Provide \$INSTALL_PATH_PREFIX from argument 4, please."
+					echo "Provide \$INSTALL_PATH_PREFIX from argument 4 (e.g.: \"install\"), please."
 				fi;
 			else
-				echo "Provide \$BUILD_PATH_PREFIX from argument 3, please."
+				echo "Provide \$BUILD_PATH_PREFIX from argument 3 (e.g.: \"build\"), please."
 			fi;
 		else
-		    echo "Provide \$SOURCE_PATH_PREFIX from argument 2, please."
+		    echo "Provide \$SOURCE_PATH from argument 2 (e.g.: \"llvm\"), please."
 
 		fi;
 	else

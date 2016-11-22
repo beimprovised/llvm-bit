@@ -27,11 +27,11 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 					CC=""
 					CPP=""
 					if ! [ "$COMPILER_SWITCH" = "" ]; then
-						if [ "$COMPILER_SWITCH" = "gnu" ]; then
+						if [ "$COMPILER_SWITCH" = "gcc" ]; then
 							CC="gcc"
 							CPP="g++"
 						fi;
-						if [ "$COMPILER_SWITCH" = "llvm" ]; then
+						if [ "$COMPILER_SWITCH" = "clang" ]; then
 							CC="clang"
 							CPP="clang++"
 						fi;
@@ -54,14 +54,14 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										-DLLVM_ENABLE_LIBCXX:BOOL=ON \
 										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
 										-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
-										-DCMAKE_C_COMPILER:FILEPATH=$(which CC) \
-										-DCMAKE_CXX_COMPILER:FILEPATH=$(which CPP) \
+										-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
+										-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \
 										-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
 										-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
 										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
 										-DLLVM_ENABLE_DOXYGEN:BOOL=ON \
 										-DLLVM_BUILD_DOCS:BOOL=ON \
-										-DLLDB_DISABLE_PYTHON:BOOL=ON \
+										-DLLDB_DISABLE_PYTHON:BOOL=OFF \
 										-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE \
 										-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE `#install-doxygen/bin/doxygen` \
 									`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \
@@ -82,7 +82,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 							echo "Compiler type unkown, please check it again."
 						fi;
 					else
-						echo "Provide \$COMPILER_SWITCH (e.g.: \"gnu\" or \"llvm\") from argument 5, please."
+						echo "Provide \$COMPILER_SWITCH (e.g.: \"gcc\" or \"clang\") from argument 5, please."
 					fi;
 				else
 					echo "Provide \$INSTALL_PATH_PREFIX from argument 4 (e.g.: \"install\"), please."

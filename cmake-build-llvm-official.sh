@@ -42,14 +42,14 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 								if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
 
-									if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
-										mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
+									if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" ]; then
+										mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH"
 									fi;
-									if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" = "$PWD" ]; then
-										cd "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm"
+									if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" = "$PWD" ]; then
+										cd "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH"
 									fi;
-									if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-llvm" ]; then
-										$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-llvm \
+									if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" ]; then
+										$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$SOURCE_PATH \
 										-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
 										-DLLVM_ENABLE_LIBCXX:BOOL=ON \
 										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
@@ -61,7 +61,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
 										-DLLVM_ENABLE_DOXYGEN:BOOL=ON \
 										-DLLVM_BUILD_DOCS:BOOL=ON \
-										-DLLDB_DISABLE_PYTHON:BOOL=OFF \
+									`#	-DLLDB_DISABLE_PYTHON:BOOL=ON` \
 										-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE \
 										-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE `#install-doxygen/bin/doxygen` \
 									`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \

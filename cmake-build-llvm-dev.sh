@@ -52,7 +52,6 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$SOURCE_PATH \
 										-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
 										-DLLVM_ENABLE_LIBCXX:BOOL=ON \
-										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
 										-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
 										-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
 										-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \

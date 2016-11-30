@@ -54,12 +54,8 @@ if ! [ "$WORKING_PATH" = "" ] ; then
                                                                                	$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH \
                                                                                	-DLLVM_PATH:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH" \
 					                                        -DCMAKE_OSX_ARCHITECTURES:STRING="x86_64" \
-										-DCMAKE_ASM_COMPILER:FILEPATH="$(which clang)" \
-										-DCMAKE_C_COMPILER:FILEPATH="$(which clang)" \
-										-DCMAKE_CXX_COMPILER:FILEPATH="$(which clang++)" \
+										-DCMAKE_ASM_COMPILER:FILEPATH="$(which $CC)" \
 										-DCMAKE_MAKE_PROGRAM:FILEPATH="$(which make)" \
-										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
-										-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
 										-DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON \
 										-DCMAKE_CXX_EXTENSIONS:BOOL=ON \
 										-DCMAKE_CXX_LINK_FLAGS:STRING="-L${HOST_CC}/lib64 -Wl,-rpath,${HOST_CC}/lib64" \
@@ -76,7 +72,6 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										-DLLVM_EXTERNAL_LIBCXXABI_SOURCE_DIR:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxxabi"   ${IFS#//Path to libcxxabi source directory}\
 										-DLLVM_EXTERNAL_LIBCXX_SOURCE_DIR:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxx"      ${IFS#//Path to libcxx source directory}\
                                                                                	-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
-                                                                               	-DLLVM_ENABLE_LIBCXX:BOOL=ON \
                                                                                	-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
                                                                                	-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
                                                                                	-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \

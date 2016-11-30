@@ -148,6 +148,7 @@
 		let d.ctags = {'type': 'git', 'url': 'https://github.com/majutsushi/ctags.git'}
 		let d.powerline = {'type': 'git', 'url': 'git://github.com/powerline/powerline.git'}
 		let d.tagbar = {'type': 'git', 'url': 'https://github.com/majutsushi/tagbar.git'}
+		let d.buftabline = {'type': 'git', 'url': 'https://github.com/ap/vim-buftabline.git'}
 	    return d
 	endfun
 
@@ -227,6 +228,7 @@
 		\ 'ctags',
 		\ 'powerline',
 		\ 'tagbar',
+		\ 'buftabline',
 		\ 'xptemplate'], {'auto_install' : 0})
 	endfun
 	call ActivateAddonsExt()	

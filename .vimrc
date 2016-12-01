@@ -131,7 +131,7 @@
 		let d.arpeggio = {'type': 'git', 'url': 'http://github.com/kana/vim-arpeggio.git' }
 		let d.minibufexplorer = {'version': '6.3.3', 'url': 'http://www.vim.org/scripts/download_script.php?src_id=13838', 'vim_version': '7.0', 'date': '2010-09-15', 'vim_script_nr': 3239, 'type': 'archive', 'script-type': 'plugin', 'archive_name': 'minibufexplpp.vim', 'author': 'Oliver Uvman'}
 		let d.vorax = {'title': 'vorax', 'version': '2.5', 'url': 'http://www.vim.org/scripts/download_script.php?src_id=14147', 'vim_version': '7.0', 'date': '2010-10-02', 'vim_script_nr': 3154, 'type': 'archive', 'script-type': 'utility', 'archive_name': 'vorax-2.5.zip', 'author': 'Alexandru Tica'} 
-		let d.vimproject = {'type': 'git', 'url': 'git://github.com/shemerey/vim-project.git'}
+		let d.vimprojectmanage = {'type': 'git', 'url': 'git://github.com/shemerey/vim-project.git'}
 		let d.backgroundcmd = {'type': 'git', 'url': 'git://github.com/MarcWeber/vim-addon-background-cmd.git'}
 		let d.local_vimrc = {'type': 'git', 'url': 'git://github.com/LucHermitte/local_vimrc.git'}
 		let d.sessions = {'type': 'git', 'url': 'https://github.com/edsono/vim-sessions.git'}
@@ -139,9 +139,9 @@
 		let d.code_pull = {'type': 'git', 'url': 'git://github.com/kasandell/Code-Pull.git'}
 		let d.pycmake = {'type': 'git', 'url': 'git://github.com/po1/vim-pycmake.git'}
 		let d.openproject = {'type': 'git', 'url': 'git://github.com/rscarvalho/OpenProject.vim.git'}
-		let d.projectrc = {'type': 'git', 'url': 'git://github.com/mattolenik/vim-projectrc.git'}
-		let d.project_tags = {'type': 'git', 'ulr': 'git://github.com/still-dreaming-1/vim-project-tags.git'}
-		let d.nerdtree_tabs = {'type': 'git', 'ulr': 'git://github.com/jistr/vim-nerdtree-tabs.git'}
+		let d.vimprojectrc = {'type': 'git', 'url': 'git://github.com/mattolenik/vim-projectrc.git'}
+		let d.project_tags = {'type': 'git', 'url': 'git://github.com/still-dreaming-1/vim-project-tags.git'}
+		let d.nerdtree_tabs = {'type': 'git', 'url': 'git://github.com/jistr/vim-nerdtree-tabs.git'}
 		let d.unite_outline = {'type': 'git', 'url': 'git://github.com/Shougo/unite-outline.git'}
 		" let d.ctags = {'type': 'git', 'url': 'git://github.com/szw/vim-tags.git'}
 		" let d.ctags = {'type': 'git', 'url': 'https://github.com/vim-scripts/ctags.vim.git'}
@@ -149,6 +149,8 @@
 		let d.powerline = {'type': 'git', 'url': 'git://github.com/powerline/powerline.git'}
 		let d.tagbar = {'type': 'git', 'url': 'https://github.com/majutsushi/tagbar.git'}
 		let d.buftabline = {'type': 'git', 'url': 'https://github.com/ap/vim-buftabline.git'}
+		let d.wintabs = {'type': 'git', 'url': 'https://github.com/zefei/vim-wintabs.git'}
+		let d.ctrlp = {'type': 'git', 'url': 'https://github.com/ctrlpvim/ctrlp.vim.git'}
 	    return d
 	endfun
 
@@ -187,18 +189,19 @@
 "		\ 'minibufexplorer',
 "		\ 'vorax',
 "		\ 'tcalc',
-"		\ 'vimproject',
+"		\ 'vimprojectmanage',
 "		\ 'backgroundcmd',
 "		\ 'local_vimrc',
 "		\ 'sessions',
 "		\ 'build_tools',
 "		\ 'code_pull',
 "		\ 'openproject',
-"		\ 'projectrc',
+"		\ 'vimprojectrc',
 "		\ 'unite_outline',
 "		\ 'ctags',
 "		\ 'powerline',
 "		\ 'tagbar',
+"		\ 'buftabline',
 "		\ 'xptemplate'], {'auto_install' : 0})
 
 		call vam#ActivateAddons(['nerd_commenter',
@@ -209,26 +212,27 @@
 		\ 'sqlutil',
 		\ 'vorax',
 		\ 'nerdtree',
+		\ 'nerdtree_tabs',
 		\ 'vimux',
-		\ 'nerd_tree',
 		\ 'genutils',
 		\ 'bufexplorer',
 		\ 'matchit',
 		\ 'vorax',
 		\ 'tcalc',
-		\ 'vimproject',
+		\ 'vimprojectmanage',
 		\ 'backgroundcmd',
 		\ 'local_vimrc',
 		\ 'sessions',
 		\ 'build_tools',
 		\ 'code_pull',
 		\ 'openproject',
-		\ 'projectrc',
+		\ 'vimprojectrc',
 		\ 'unite_outline',
 		\ 'ctags',
 		\ 'powerline',
 		\ 'tagbar',
-		\ 'buftabline',
+		\ 'ctrlp',
+		\ 'minibufexplorer',
 		\ 'xptemplate'], {'auto_install' : 0})
 	endfun
 	call ActivateAddonsExt()	
@@ -239,13 +243,27 @@
 	autocmd StdinReadPre * let s:std_in=1
 	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 	map <C-n> :NERDTreeToggle<CR>
+	map <Leader>n <plug>NERDTreeTabsToggle<CR>
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 	let g:NERDTreeDirArrowExpandable = '▸'
 	let g:NERDTreeDirArrowCollapsible = '▾'
+	let g:nerdtree_tabs_open_on_console_startup=1
 
 set exrc
 set secure
+set hidden
+nnoremap <C-h> :bnext<CR>
+nnoremap <C-l> :bprev<CR>
 
+" map <C-H> <Plug>(wintabs_previous)
+" map <C-L> <Plug>(wintabs_next)
+" map <C-T>c <Plug>(wintabs_close)
+" map <C-T>o <Plug>(wintabs_only)
+" map <C-W>c <Plug>(wintabs_close_window)
+" map <C-W>o <Plug>(wintabs_only_window)
+" command! Tabc WintabsCloseVimtab
+" command! Tabo WintabsOnlyVimtab
+" 
 let g:vim_tags_auto_generate = 1
 let g:vim_tags_ctags_binary = system("${which ctags}")
 let g:vim_tags_project_tags_command = "{CTAGS} -R {OPTIONS} {DIRECTORY} 2>/dev/null"
@@ -261,3 +279,126 @@ let g:vim_tags_cache_dir = expand($HOME)
 nmap <F8> :TagbarToggle<CR>
 set tags=./tags,tags;$HOME
 set autochdir
+
+
+" " Rename tabs to show tab number.
+" " (Based on http://stackoverflow.com/questions/5927952/whats-implementation-of-vims-default-tabline-function)
+" if exists("+showtabline")
+"     function! MyTabLine()
+"         let s = ''
+"         let wn = ''
+"         let t = tabpagenr()
+"         let i = 1
+"         while i <= tabpagenr('$')
+"             let buflist = tabpagebuflist(i)
+"             let winnr = tabpagewinnr(i)
+"             let s .= '%' . i . 'T'
+"             let s .= (i == t ? '%1*' : '%2*')
+"             let s .= ' '
+"             let wn = tabpagewinnr(i,'$')
+" 
+"             let s .= '%#TabNum#'
+"             let s .= i
+"             " let s .= '%*'
+"             let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+"             let bufnr = buflist[winnr - 1]
+"             let file = bufname(bufnr)
+"             let buftype = getbufvar(bufnr, 'buftype')
+"             if buftype == 'nofile'
+"                 if file =~ '\/.'
+"                     let file = substitute(file, '.*\/\ze.', '', '')
+"                 endif
+"             else
+"                 let file = fnamemodify(file, ':p:t')
+"             endif
+"             if file == ''
+"                 let file = '[No Name]'
+"             endif
+"             let s .= ' ' . file . ' '
+"             let i = i + 1
+"         endwhile
+"         let s .= '%T%#TabLineFill#%='
+"         let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+"         return s
+"     endfunction
+"     set stal=2
+"     set tabline=%!MyTabLine()
+"     set showtabline=1
+"     highlight link TabNum Special
+" endif
+" 
+
+set tabline=%!MyTabLine()  " custom tab pages line
+function! MyTabLine()
+        let s = '' " complete tabline goes here
+        " loop through each tab page
+        for t in range(tabpagenr('$'))
+                " set highlight
+                if t + 1 == tabpagenr()
+                        let s .= '%#TabLineSel#'
+                else
+                        let s .= '%#TabLine#'
+                endif
+                " set the tab page number (for mouse clicks)
+                let s .= '%' . (t + 1) . 'T'
+                let s .= ' '
+                " set page number string
+                let s .= t + 1 . ' '
+                " get buffer names and statuses
+                let n = ''      "temp string for buffer names while we loop and check buftype
+                let m = 0       " &modified counter
+                let bc = len(tabpagebuflist(t + 1))     "counter to avoid last ' '
+                " loop through each buffer in a tab
+                for b in tabpagebuflist(t + 1)
+                        " buffer types: quickfix gets a [Q], help gets [H]{base fname}
+                        " others get 1dir/2dir/3dir/fname shortened to 1/2/3/fname
+                        if getbufvar( b, "&buftype" ) == 'help'
+                                let n .= '[H]' . fnamemodify( bufname(b), ':t:s/.txt$//' )
+                        elseif getbufvar( b, "&buftype" ) == 'quickfix'
+                                let n .= '[Q]'
+                        else
+                                let n .= pathshorten(bufname(b))
+                        endif
+                        " check and ++ tab's &modified count
+                        if getbufvar( b, "&modified" )
+                                let m += 1
+                        endif
+                        " no final ' ' added...formatting looks better done later
+                        if bc > 1
+                                let n .= ' '
+                        endif
+                        let bc -= 1
+                endfor
+                " add modified label [n+] where n pages in tab are modified
+                if m > 0
+                        let s .= '[' . m . '+]'
+                endif
+                " select the highlighting for the buffer names
+                " my default highlighting only underlines the active tab
+                " buffer names.
+                if t + 1 == tabpagenr()
+                        let s .= '%#TabLineSel#'
+                else
+                        let s .= '%#TabLine#'
+                endif
+                " add buffer names
+                if n == ''
+                        let s.= '[New]'
+                else
+                        let s .= n
+                endif
+                " switch to no underlining and add final space to buffer list
+                let s .= ' '
+        endfor
+        " after the last tab fill with TabLineFill and reset tab page nr
+        let s .= '%#TabLineFill#%T'
+        " right-align the label to close the current tab page
+        if tabpagenr('$') > 1
+                let s .= '%=%#TabLineFill#%999Xclose'
+        endif
+        return s
+endfunction
+
+
+
+

@@ -58,7 +58,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										-DCMAKE_MAKE_PROGRAM:FILEPATH="$(which make)" \
 										-DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON \
 										-DCMAKE_CXX_EXTENSIONS:BOOL=ON \
-										-DCMAKE_CXX_LINK_FLAGS:STRING="-L${HOST_CC}/lib64 -Wl,-rpath,${HOST_CC}/lib64" \
+										-DCMAKE_CXX_LINK_FLAGS:STRING="-L${HOST_CC}/lib -Wl,-rpath,${HOST_CC}/lib" \
 										-DLLVM_ENABLE_ASSERTIONS:BOOL=ON \
 										-DLLVM_ENABLE_WERROR:BOOL=ON \
 										-DLLVM_ENABLE_BACKTRACES:BOOL=ON \
@@ -72,12 +72,12 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										-DLLVM_EXTERNAL_LIBCXXABI_SOURCE_DIR:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxxabi"   ${IFS#//Path to libcxxabi source directory}\
 										-DLLVM_EXTERNAL_LIBCXX_SOURCE_DIR:PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxx"      ${IFS#//Path to libcxx source directory}\
                                                                                	-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
-                                                                               	-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
+                                                                               	-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++ -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
                                                                                	-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
                                                                                	-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \
                                                                                	-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
                                                                                	-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
-                                                                               	-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
+                                                                               	-DLIBOMP_CFLAGS:STRING="-stdlib=libc++ -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
                                                                        `#      	-DLLVM_ENABLE_DOXYGEN:BOOL=ON` \
                                                                        `#      	-DLLVM_BUILD_DOCS:BOOL=ON` \
                                                                        `#      	-DLLDB_DISABLE_PYTHON:BOOL=ON` \

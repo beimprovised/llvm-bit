@@ -7,8 +7,9 @@ if ! ( [ "$WORKING_PATH" = "" ] || [ "$GITHUB_REPOSITORY_NAME" = "" ] || [ "$REL
         if [ ! -d "$WORKING_PATH" ]; then
                 mkdir $WORKING_PATH
         fi;
-	
-	cd "$WORKING_PATH"
+	if [ ! "$PWD" = "$WORKING_PATH" ]; then	
+		cd "$WORKING_PATH"
+	fi;
 	echo "pull llvm ..."
 #	RELATIVE_SOURCE_PATH="llvm-bit"
 	SOURCE_PATH="$WORKING_PATH/$RELATIVE_SOURCE_PATH"
@@ -17,7 +18,10 @@ if ! ( [ "$WORKING_PATH" = "" ] || [ "$GITHUB_REPOSITORY_NAME" = "" ] || [ "$REL
 		mkdir "$RELATIVE_SOURCE_PATH"
                 git clone "https://github.com/$GITHUB_REPOSITORY_NAME/llvm.git" "$SOURCE_PATH"	# http://llvm.org/git/llvm.git
         fi;
-	cd "$SOURCE_PATH"
+	
+	if [ ! "$PWD" = "$SOURCE_PATH" ]; then	
+		cd "$SOURCE_PATH"
+	fi;
         if [ ! -d ".git" ]; then
                 git remote add origin "https://github.com/$GITHUB_REPOSITORY_NAME/llvm.git"	# http://llvm.org/git/llvm.git
         fi;

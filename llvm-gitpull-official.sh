@@ -80,36 +80,36 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 		fi;
 	fi;
 
-#	# If you have clang too:
-#	echo "pull lldb ..."
-#	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
-#	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/lldb" ]; then
-#		git clone http://llvm.org/git/lldb.git
-#	fi;
-#	cd lldb
-#	if [ ! -d ".git" ]; then
-#		git remote add origin http://llvm.org/git/lldb.git
-#		#git clone http://llvm.org/git/lldb.git llvm/tools/lldb
-#	fi;
-#		git pull --rebase
-#		git fetch
-#		git checkout master
-#
-#	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
-#		if [ ! -d ".git/svn" ]; then
-#		echo "clang svn initializing ..."
-#			git svn init https://llvm.org/svn/llvm-project/lldb/trunk --username=$whoami
-#			git config svn-remote.svn.fetch :refs/remotes/origin/master
-#			git svn rebase -l
-#		else
-#			git config --unset-all svn-remote.svn.url
-#			git config --unset-all svn-remote.svn.fetch
-#			git svn init https://llvm.org/svn/llvm-project/lldb/trunk --username=$whoami
-#			git config svn-remote.svn.fetch :refs/remotes/origin/master
-#			git svn rebase -l
-#		fi;
-#	fi;
-#
+	# If you have clang too:
+	echo "pull lldb ..."
+	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/lldb" ]; then
+		git clone http://llvm.org/git/lldb.git
+	fi;
+	cd lldb
+	if [ ! -d ".git" ]; then
+		git remote add origin http://llvm.org/git/lldb.git
+		#git clone http://llvm.org/git/lldb.git llvm/tools/lldb
+	fi;
+		git pull --rebase
+		git fetch
+		git checkout master
+
+	if ! [ "$NOT_HAS_GIT_SVN" = "" ]; then
+		if [ ! -d ".git/svn" ]; then
+		echo "clang svn initializing ..."
+			git svn init https://llvm.org/svn/llvm-project/lldb/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		else
+			git config --unset-all svn-remote.svn.url
+			git config --unset-all svn-remote.svn.fetch
+			git svn init https://llvm.org/svn/llvm-project/lldb/trunk --username=$whoami
+			git config svn-remote.svn.fetch :refs/remotes/origin/master
+			git svn rebase -l
+		fi;
+	fi;
+
 	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull compiler-rt ..."
 	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/compiler-rt" ]; then

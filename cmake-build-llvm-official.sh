@@ -54,6 +54,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 										-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++" \
 										-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
 										-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \
+									`#	-DLLDB_DISABLE_LIBEDIT:BOOL=ON` \
 										-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
 										-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
 										-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \

@@ -12,7 +12,8 @@ SOURCE_PATH=$2
 BUILD_PATH_PREFIX=$3
 INSTALL_PATH_PREFIX=$4
 COMPILER_SWITCH=$5
-PROJECT_TYPE=$6
+CLANG_MAIN_VERSION=$6
+PROJECT_TYPE=$7
 #DOXYGEN_DOT_EXECUTABLE=$6 	#/usr/bin/dot
 #DOXYGEN_EXECUTABLE=$7 		#/usr/bin/doxygen
 
@@ -38,53 +39,56 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 						fi;
 
 						if [[ ( "$CC" != "" ) && ( "$CPP" != "" ) ]]; then
-							if ! [ "$PROJECT_TYPE" = "" ]; then   
-#							if ! [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
+							if ! [ "$CLANG_MAIN_VERSION" = "" ]; then
+								if ! [ "$PROJECT_TYPE" = "" ]; then   
+#								if ! [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
 #
-#								if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
+#									if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
 
-									if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" ]; then
-										mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH"
-									fi;
-									if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" = "$PWD" ]; then
-										cd "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH"
-									fi;
-									if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" ]; then
-										$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$SOURCE_PATH \
-										-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++ -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/5.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
-										-DCMAKE_C_FLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/5.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
-										-DCMAKE_EXE_LINKER_FLAGS="-L$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib -lc++" \
-										-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
-										-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \
-									`#	-DLLDB_DISABLE_LIBEDIT:BOOL=ON` \
-										-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
-										-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
-										-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
-										-DLLVM_ENABLE_LIBCXX:BOOL=ON \
-										-DLIBOMP_CFLAGS:STRING="-stdlib=libc++" \
-									`#	-DLLVM_ENABLE_DOXYGEN:BOOL=ON` \
-									`#	-DLLVM_BUILD_DOCS:BOOL=ON` \
-									`#	-DLLDB_DISABLE_PYTHON:BOOL=ON` \
-									`#	-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE` \
-									`#	-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE` `#install-doxygen/bin/doxygen` \
-									`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \
-										-DCMAKE_BUILD_TYPE:STRING="Debug" \
-										-G "$PROJECT_TYPE" \
-										"$WORKING_PATH/$SOURCE_PATH";
-									else
-										echo "Have not entered destination. Operation failed."
-									fi;
-#								else		
-#									echo "Provide \$DOXYGEN_EXECUTABLE from argument 7, please."
+										if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" ]; then
+											mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH"
+										fi;
+										if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" = "$PWD" ]; then
+											cd "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH"
+										fi;
+										if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-$SOURCE_PATH" ]; then
+											$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$SOURCE_PATH \
+											-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++ -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
+											-DCMAKE_C_FLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
+											-DCMAKE_EXE_LINKER_FLAGS="-L$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib -lc++" \
+											-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
+											-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \
+										`#	-DLLDB_DISABLE_LIBEDIT:BOOL=ON` \
+											-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
+											-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
+											-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=ON \
+											-DLLVM_ENABLE_LIBCXX:BOOL=ON \
+											-DLIBOMP_CFLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include" \
+										`#	-DLLVM_ENABLE_DOXYGEN:BOOL=ON` \
+										`#	-DLLVM_BUILD_DOCS:BOOL=ON` \
+										`#	-DLLDB_DISABLE_PYTHON:BOOL=ON` \
+										`#	-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE` \
+										`#	-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE` `#install-doxygen/bin/doxygen` \
+										`#	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=ON` \
+											-DCMAKE_BUILD_TYPE:STRING="Debug" \
+											-G "$PROJECT_TYPE" \
+											"$WORKING_PATH/$SOURCE_PATH";
+										else
+											echo "Have not entered destination. Operation failed."
+										fi;
+#									else		
+#										echo "Provide \$DOXYGEN_EXECUTABLE from argument 7, please."
+#									fi;
+#	
+#								else
+#									echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself) from argument 6, please."
 #								fi;
-#
-#							else
-#								echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself) from argument 6, please."
-#							fi;
-                                                        else                                                        
-                                                                echo "Provide \$PROJECT_TYPE from argument 6."      
-                                                        fi;                                                         
-
+								else                                                        
+									echo "Provide \$PROJECT_TYPE from argument 7."      
+								fi;                                                         
+							else
+								echo "Provide \$CLANG_MAIN_VERSION from argument 6."
+							fi;
 						else
 							echo "Compiler type unkown, please check it again."
 						fi;

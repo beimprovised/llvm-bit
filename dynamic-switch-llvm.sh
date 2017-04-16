@@ -35,7 +35,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 	done;
 	# done <<< "$CPATH";
 	append=""
-	append=$OBJ_ROOT/include/c++/v1:$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin	#:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
+	append=$OBJ_ROOT/include:$OBJ_ROOT/include/c++/v1:$OBJ_ROOT/lib:$OBJ_ROOT/bin	#:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
 	CPATH=""
 	if [ "$tmp" = "" ] ; then
 		CPATH=$append
@@ -64,7 +64,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 	done;
 	# done <<< "$CPATH";
 	append=""
-	append=$OBJ_ROOT/include/c++/v1:$OBJ_ROOT/include:$OBJ_ROOT/lib:$OBJ_ROOT/bin	#:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
+	append=$OBJ_ROOT/include:$OBJ_ROOT/include/c++/v1:$OBJ_ROOT/lib:$OBJ_ROOT/bin	#:$OBJ_ROOT_ORIGINAL/include:$OBJ_ROOT_ORIGINAL/lib:$OBJ_ROOT_ORIGINAL/bin
 	PATH=""
 	if [ "$tmp" = "" ] ; then
 		PATH=$append

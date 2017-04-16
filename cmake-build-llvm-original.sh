@@ -13,7 +13,8 @@ BUILD_PATH_PREFIX=$3
 INSTALL_PATH_PREFIX=$4
 COMPILER_SWITCH=$5
 CLANG_MAIN_VERSION=$6
-PROJECT_TYPE=$7
+ATOMIC_PATH=$7
+PROJECT_TYPE=$8
 #DOXYGEN_DOT_EXECUTABLE=$6 	#/usr/bin/dot
 #DOXYGEN_EXECUTABLE=$7 		#/usr/bin/doxygen
 
@@ -40,6 +41,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 
 						if [[ ( "$CC" != "" ) && ( "$CPP" != "" ) ]]; then
 							if ! [ "$CLANG_MAIN_VERSION" = "" ]; then
+								if ! [ "$ATOMIC_PATH" = "" ]; then
 								if ! [ "$PROJECT_TYPE" = "" ]; then   
 #								if ! [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
 #
@@ -56,6 +58,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 											-DCMAKE_CXX_FLAGS:STRING="-std=c++11 -stdlib=libc++ -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
 											-DCMAKE_C_FLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
 											-DCMAKE_EXE_LINKER_FLAGS="-L$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib -lc++" \
+											-DCMAKE_CXX_LINK_FLAGS:STRING="-L$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib -L${ATOMIC_PATH} -Wl,-rpath,$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib -lc++ -lc++abi -latomic" \
 											-DCMAKE_C_COMPILER:FILEPATH=$(which $CC) \
 											-DCMAKE_CXX_COMPILER:FILEPATH=$(which $CPP) \
 										`#	-DLLDB_DISABLE_LIBEDIT:BOOL=ON` \
@@ -84,8 +87,13 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 #									echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself) from argument 6, please."
 #								fi;
 								else                                                        
-									echo "Provide \$PROJECT_TYPE from argument 7."      
-								fi;                                                         
+									echo "Provide \$PROJECT_TYPE from argument 8."      
+								fi;                                                        
+ 
+								else
+									echo "Provide \$ATOMIC_PATH from argument 7."
+								fi;
+	
 							else
 								echo "Provide \$CLANG_MAIN_VERSION from argument 6."
 							fi;

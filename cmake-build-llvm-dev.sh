@@ -89,13 +89,13 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 											-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
 											-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
 											-DLIBOMP_CFLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1" \
-											-DLIBOMP_USE_QUAD_PRECISION:BOOL=TRUE \
-									       `#      	-DLLVM_ENABLE_DOXYGEN:BOOL=TRUE` \
-									       `#      	-DLLVM_BUILD_DOCS:BOOL=TRUE` \
-									       `#      	-DLLDB_DISABLE_PYTHON:BOOL=TRUE` \
-									       `#      	-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE` \
-									       `#      	-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE` `#install-doxygen/bin/doxygen` \
-									       `#      	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=TRUE` \
+										`#	-DLIBOMP_USE_QUAD_PRECISION:BOOL=TRUE` \
+									       	`#     	-DLLVM_ENABLE_DOXYGEN:BOOL=TRUE` \
+									       	`#     	-DLLVM_BUILD_DOCS:BOOL=TRUE` \
+									       	`#     	-DLLDB_DISABLE_PYTHON:BOOL=TRUE` \
+									       	`#     	-DDOXYGEN_DOT_EXECUTABLE:FILEPATH=$DOXYGEN_DOT_EXECUTABLE` \
+									       	`#     	-DDOXYGEN_EXECUTABLE:FILEPATH=$WORKING_PATH/$DOXYGEN_EXECUTABLE` `#install-doxygen/bin/doxygen` \
+									       	`#     	-DLLDB_EXPORT_ALL_SYMBOLS:BOOL=TRUE` \
 											-DCMAKE_BUILD_TYPE:STRING="Debug" \
 											-G "$PROJECT_TYPE" \
 											$WORKING_PATH/$RELATIVE_SOURCE_PATH; 

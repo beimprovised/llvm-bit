@@ -52,6 +52,11 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 
 	# If you have clang too:
 	echo "pull clang ..."
+
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools" ]; then
+		mkdir "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
+	fi;
+
 	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
 	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang" ]; then
 		git clone http://llvm.org/git/clang.git
@@ -108,6 +113,10 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 			git config svn-remote.svn.fetch :refs/remotes/origin/master
 			git svn rebase -l
 		fi;
+	fi;
+
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects" ]; then
+		mkdir "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	fi;
 
 	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
@@ -283,6 +292,12 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools/clang-tools-extra" ]; then
 		git clone http://llvm.org/git/clang-tools-extra.git	 # svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
 	fi;
+
+	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools" ]; then
+		mkdir "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools"
+	fi;
+
+
 	cd clang-tools-extra
 	if [ ! -d ".git" ]; then
 		git remote add origin http://llvm.org/git/clang-tools-extra.git	 # svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra

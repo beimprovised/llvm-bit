@@ -63,6 +63,10 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 
 		# If you have clang too:
 		echo "pull clang ..."
+		if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools" ]; then
+			mkdir "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
+		fi;
+
 		cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools"
 		if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang" ]; then
 			git clone https://beimprovised@github.com/beimprovised/clang-dev.git clang	# http://llvm.org/git/clang.git
@@ -126,6 +130,10 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 	#		fi;
 	#	fi;
 	#
+		if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects" ]; then
+			mkdir "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
+		fi;
+
 		cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 		echo "pull compiler-rt ..."
 		if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/compiler-rt" ]; then
@@ -303,6 +311,9 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 	#			git svn rebase -l
 	#		fi;
 	#	fi;
+		if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools" ]; then
+			mkdir "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools"
+		fi;
 
 		cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/tools/clang/tools"
 		echo "pull clang-tools-extra ..."

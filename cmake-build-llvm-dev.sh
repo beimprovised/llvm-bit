@@ -14,7 +14,8 @@ INSTALL_PATH_PREFIX=$4
 COMPILER_SWITCH=$5
 CLANG_MAIN_VERSION=$6
 ATOMIC_PATH=$7
-PROJECT_TYPE=$8
+MAKE_PROGRAM=$8
+PROJECT_TYPE=$9
 #DOXYGEN_DOT_EXECUTABLE=$6 	#/usr/bin/dot
 #DOXYGEN_EXECUTABLE=$7 		#/usr/bin/doxygen
 
@@ -42,6 +43,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 						if [[ ( "$CC" != "" ) && ( "$CPP" != "" ) ]]; then
                                                         if ! [ "$CLANG_MAIN_VERSION" = "" ]; then
 								if ! [ "$ATOMIC_PATH" = "" ]; then
+								if ! [ "$MAKE_PROGRAM" = "" ]; then
 								if ! [ "$PROJECT_TYPE" = "" ]; then
 
 
@@ -65,7 +67,7 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 											-DLIBCXX_HAVE_CXX_ATOMICS_WITHOUT_LIB:INTERNAL=1 \
 `#											-DCMAKE_ASM_COMPILER:FILEPATH="$INSTALL_ROOT/bin/$CC"` \
 											-DCMAKE_ASM_COMPILER:FILEPATH="$(which as)" \
-											-DCMAKE_MAKE_PROGRAM:FILEPATH="$(which make)" \
+											-DCMAKE_MAKE_PROGRAM:FILEPATH="$MAKE_PROGRAM" \
 											-DCMAKE_CXX_STANDARD_REQUIRED:BOOL=TRUE \
 											-DCAN_TARGET_x86_64:INTERNAL=TRUE \
 											-DCMAKE_CXX_EXTENSIONS:BOOL=TRUE \
@@ -100,8 +102,10 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 											-DCMAKE_MODULE_LINKER_FLAGS:STRING="-stdlib=libc++" \
 											-DCMAKE_C_COMPILER:FILEPATH="$INSTALL_ROOT/bin/$CC" \
 											-DCMAKE_CXX_COMPILER:FILEPATH="$INSTALL_ROOT/bin/$CPP" \
-											-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING="" \
-											-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING="" \
+`#											-DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS:STRING=""` \
+`#											-DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS:STRING=""` \
+											-DCMAKE_CXX_IMPLICIT_LINK_LIBRARIES:STRING="c++;m;c" \
+`#											-DCMAKE_CXX_IMPLICIT_LINK_DIRECTORIES:PATHS="$ATOMIC_PATH;$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib"` ${IFS#//"usr/lib/gcc/x86_64-linux-gnu/5;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib"} \
 `#											-DLIBOMP_CFLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/include/c++/v1"` \
 											-DLIBOMP_CFLAGS:STRING="-I$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH/lib/clang/$CLANG_MAIN_VERSION.0.0/include -I$WORKING_PATH/$RELATIVE_SOURCE_PATH/projects/libcxx/include" \
 										`#	-DLIBOMP_USE_QUAD_PRECISION:BOOL=TRUE` \
@@ -124,8 +128,13 @@ if ! [ "$WORKING_PATH" = "" ] ; then
 #								else
 #									echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself) from argument 6, please."
 #								fi;
+
 								else
-									echo "Provide \$PROJECT_TYPE from argument 8."
+									echo "Provide \$PROJECT_TYPE from argument 9."
+								fi;
+
+								else
+									echo "Provide \$MAKE_PROGRAM from argument 8."
 								fi;
 
 								else

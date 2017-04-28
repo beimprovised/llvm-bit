@@ -62,7 +62,7 @@ CPP=""
 #    echo "Provide \$COMPILER_SWITCH (e.g.: \"gcc\" or \"clang\"), please."
 #    exit 6;
 #fi;
-if [[ ( "$CC" = "" ) || ( "$CPP" != "" ) ]]; then
+if [[ ( "$CC" = "" ) || ( "$CPP" = "" ) ]]; then
     echo "Compiler type unkown, please check it again."
     exit 6;
 fi;

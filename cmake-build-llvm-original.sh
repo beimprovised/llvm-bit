@@ -31,45 +31,81 @@ echo "cmake config ..."
 ##DOXYGEN_DOT_EXECUTABLE=$6 	#/usr/bin/dot
 ##DOXYGEN_EXECUTABLE=$7 		#/usr/bin/doxygen
 
-LIBCXX_PREIFX="std"
-
-if ! [ "$WORKING_PATH" = "" ] ; then
-
-	if ! [ "$CMAKE" = "" ] ; then
-
-	if ! [ "$RELATIVE_SOURCE_PATH" = "" ] ; then
-
-	if ! [ "$BUILD_PATH_PREFIX" = "" ] ; then
-
-	if ! [ "$INSTALL_PATH_PREFIX" = "" ] ; then
-		CC=""
-		CPP=""
-	if ! [ "$COMPILER_SWITCH" = "" ]; then
 
 
+if [ "$WORKING_PATH" = "" ] ; then
+    echo "Export \$WORKING_PATH first."
+    exit 1;
 
-	if [[ ( "$CC" != "" ) && ( "$CPP" != "" ) ]]; then
-	if ! [ "$CLANG_MAIN_VERSION" = "" ]; then
-	if ! [ "$ATOMIC_PATH" = "" ]; then
-	if ! [ "$MAKE_PROGRAM" = "" ]; then 
-	if ! [ "$PROJECT_TYPE" = "" ]; then   
-#	if ! [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
-#
-#	if ! [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
-
-	if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" ]; then
-		mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH"
-	fi;
-	if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" = "$PWD" ]; then
-		cd "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH"
-	fi;
-	if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" ]; then
-if [ $LLVM_ENABLE_LIBCXX = "ON" ]; then
-LIBCXX_PREIFX = ""
 fi;
-	if [ "$COMPILER_SWITCH" = "gcc" ]; then
-		CC="gcc"
-		CPP="g++"
+if [ "$CMAKE" = "" ] ; then
+
+    echo "Provide \$CMAKE, please."
+    exit 2;
+fi;
+if [ "$RELATIVE_SOURCE_PATH" = "" ] ; then
+    echo "Provide \$RELATIVE_SOURCE_PATH (e.g.: \"llvm\"), please."
+    exit 3;
+fi;
+
+if [ "$BUILD_PATH_PREFIX" = "" ] ; then
+    echo "Provide \$BUILD_PATH_PREFIX (e.g.: \"build\"), please."
+    exit 4;
+fi;
+if [ "$INSTALL_PATH_PREFIX" = "" ] ; then
+    echo "Provide \$INSTALL_PATH_PREFIX (e.g.: \"install\"), please."
+    exit 5;
+fi;
+CC=""
+CPP=""
+if [ "$COMPILER_SWITCH" = "" ]; then
+    echo "Provide \$COMPILER_SWITCH (e.g.: \"gcc\" or \"clang\"), please."
+    exit 6;
+fi;
+if [[ ( "$CC" = "" ) || ( "$CPP" != "" ) ]]; then
+    echo "Compiler type unkown, please check it again."
+    exit 7;
+fi;
+
+if [ "$CLANG_MAIN_VERSION" = "" ]; then
+    echo "Provide \$CLANG_MAIN_VERSION."
+    exit 8;
+fi;
+if [ "$ATOMIC_PATH" = "" ]; then
+    echo "Provide \$ATOMIC_PATH."
+    exit 9;
+fi;
+if [ "$MAKE_PROGRAM" = "" ]; then 
+    echo "Provide \$MAKE_PROGRAM."      
+    exit 10;
+fi; 
+if [ "$PROJECT_TYPE" = "" ]; then 
+    echo "Provide \$PROJECT_TYPE."      
+    exit 11;	
+fi;    
+#	if [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
+#		echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself), please."
+#    		exit 1;
+#	fi;
+#	if [ "$DOXYGEN_EXECUTABLE" = "" ] ; then
+#		echo "Provide \$DOXYGEN_EXECUTABLE from argument 7, please."
+#    		exit 1;
+#	fi;
+#	
+
+if ! [ -d "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" ]; then
+	mkdir "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH"
+fi;
+if ! [ "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" = "$PWD" ]; then
+	cd "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH"
+fi;
+if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" ]; then
+
+
+if [ "$LLVM_ENABLE_LIBCXX" = "ON" ]; then
+	LIBCXX_PREFIX=""
+	CC="$INSTALL_ROOT/bin/gcc"
+	CPP="$INSTALL_ROOT/bin/g++"
 
 CMAKE_COMMAND="$CMAKE -G $PROJECT_TYPE $WORKING_PATH/$RELATIVE_SOURCE_PATH "
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH "
@@ -100,11 +136,10 @@ CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_ASM_COMPILER:FILEPATH=$INSTALL_ROOT/bin/$C
 `#-DCMAKE_ASM_COMPILER:FILEPATH=/usr/bin/cc` \
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_ASM_FLAGS_DEBUG:STRING=-g "
 
-	fi;
-
-	if [ "$COMPILER_SWITCH" = "clang" ]; then
-		CC="clang"
-		CPP="clang++"
+else
+	LIBCXX_PREFIX="std"
+	CC="$INSTALL_ROOT/bin/clang"
+	CPP="$INSTALL_ROOT/bin/clang++"
 
 CMAKE_COMMAND="$CMAKE  -DCMAKE_INSTALL_PREFIX:PATH=\"$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH\" "	#$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH \
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_MAKE_PROGRAM:FILEPATH=\"$MAKE_PROGRAM\" "
@@ -130,7 +165,6 @@ CMAKE_COMMAND=$CMAKE_COMMAND:"-DPOLLY_ENABLE_GPGPU_CODEGEN:BOOL=OFF "
 #CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_EXTRA_GENERATOR_C_SYSTEM_DEFINED_MACROS:INTERNAL=\"__STDC__;1;__STDC_VERSION__;201112L;__STDC_UTF_16__;1;__STDC_UTF_32__;1;__STDC_HOSTED__;1;__GNUC__;5;__GNUC_MINOR__;4;__GNUC_PATCHLEVEL__; ;__VERSION__;"5.4.0 20160609";__ATOMIC_RELAXED; ;__ATOMIC_SEQ_CST;5;__ATOMIC_ACQUIRE;2;__ATOMIC_RELEASE;3;__ATOMIC_ACQ_REL;4;__ATOMIC_CONSUME;1;__FINITE_MATH_ONLY__; ;_LP64;1;__LP64__;1;__SIZEOF_INT__;4;__SIZEOF_LONG__;8;__SIZEOF_LONG_LONG__;8;__SIZEOF_SHORT__;2;__SIZEOF_FLOAT__;4;__SIZEOF_DOUBLE__;8;__SIZEOF_LONG_DOUBLE__;16;__SIZEOF_SIZE_T__;8;__CHAR_BIT__;8;__BIGGEST_ALIGNMENT__;16;__ORDER_LITTLE_ENDIAN__;1234;__ORDER_BIG_ENDIAN__;4321;__ORDER_PDP_ENDIAN__;3412;__BYTE_ORDER__;__ORDER_LITTLE_ENDIAN__;__FLOAT_WORD_ORDER__;__ORDER_LITTLE_ENDIAN__;__SIZEOF_POINTER__;8;__SIZE_TYPE__;long unsigned int;__PTRDIFF_TYPE__;long int;__WCHAR_TYPE__;int;__WINT_TYPE__;unsigned int;__INTMAX_TYPE__;long int;__UINTMAX_TYPE__;long unsigned int;__CHAR16_TYPE__;short unsigned int;__CHAR32_TYPE__;unsigned int;__SIG_ATOMIC_TYPE__;int;__INT8_TYPE__;signed char;__INT16_TYPE__;short int;__INT32_TYPE__;int;__INT64_TYPE__;long int;__UINT8_TYPE__;unsigned char;__UINT16_TYPE__;short unsigned int;__UINT32_TYPE__;unsigned int;__UINT64_TYPE__;long unsigned int;__INT_LEAST8_TYPE__;signed char;__INT_LEAST16_TYPE__;short int;__INT_LEAST32_TYPE__;int;__INT_LEAST64_TYPE__;long int;__UINT_LEAST8_TYPE__;unsigned char;__UINT_LEAST16_TYPE__;short unsigned int;__UINT_LEAST32_TYPE__;unsigned int;__UINT_LEAST64_TYPE__;long unsigned int;__INT_FAST8_TYPE__;signed char;__INT_FAST16_TYPE__;long int;__INT_FAST32_TYPE__;long int;__INT_FAST64_TYPE__;long int;__UINT_FAST8_TYPE__;unsigned char;__UINT_FAST16_TYPE__;long unsigned int;__UINT_FAST32_TYPE__;long unsigned int;__UINT_FAST64_TYPE__;long unsigned int;__INTPTR_TYPE__;long int;__UINTPTR_TYPE__;long unsigned int;__has_include(STR);__has_include__(STR);__has_include_next(STR);__has_include_next__(STR);__GXX_ABI_VERSION;1009;__SCHAR_MAX__;0x7f;__SHRT_MAX__;0x7fff;__INT_MAX__;0x7fffffff;__LONG_MAX__;0x7fffffffffffffffL;__LONG_LONG_MAX__;0x7fffffffffffffffLL;__WCHAR_MAX__;0x7fffffff;__WCHAR_MIN__;(-__WCHAR_MAX__ - 1);__WINT_MAX__;0xffffffffU;__WINT_MIN__;0U;__PTRDIFF_MAX__;0x7fffffffffffffffL;__SIZE_MAX__;0xffffffffffffffffUL;__INTMAX_MAX__;0x7fffffffffffffffL;__INTMAX_C(c);c ## L;__UINTMAX_MAX__;0xffffffffffffffffUL;__UINTMAX_C(c);c ## UL;__SIG_ATOMIC_MAX__;0x7fffffff;__SIG_ATOMIC_MIN__;(-__SIG_ATOMIC_MAX__ - 1);__INT8_MAX__;0x7f;__INT16_MAX__;0x7fff;__INT32_MAX__;0x7fffffff;__INT64_MAX__;0x7fffffffffffffffL;__UINT8_MAX__;0xff;__UINT16_MAX__;0xffff;__UINT32_MAX__;0xffffffffU;__UINT64_MAX__;0xffffffffffffffffUL;__INT_LEAST8_MAX__;0x7f;__INT8_C(c);c;__INT_LEAST16_MAX__;0x7fff;__INT16_C(c);c;__INT_LEAST32_MAX__;0x7fffffff;__INT32_C(c);c;__INT_LEAST64_MAX__;0x7fffffffffffffffL;__INT64_C(c);c ## L;__UINT_LEAST8_MAX__;0xff;__UINT8_C(c);c;__UINT_LEAST16_MAX__;0xffff;__UINT16_C(c);c;__UINT_LEAST32_MAX__;0xffffffffU;__UINT32_C(c);c ## U;__UINT_LEAST64_MAX__;0xffffffffffffffffUL;__UINT64_C(c);c ## UL;__INT_FAST8_MAX__;0x7f;__INT_FAST16_MAX__;0x7fffffffffffffffL;__INT_FAST32_MAX__;0x7fffffffffffffffL;__INT_FAST64_MAX__;0x7fffffffffffffffL;__UINT_FAST8_MAX__;0xff;__UINT_FAST16_MAX__;0xffffffffffffffffUL;__UINT_FAST32_MAX__;0xffffffffffffffffUL;__UINT_FAST64_MAX__;0xffffffffffffffffUL;__INTPTR_MAX__;0x7fffffffffffffffL;__UINTPTR_MAX__;0xffffffffffffffffUL;__GCC_IEC_559;2;__GCC_IEC_559_COMPLEX;2;__FLT_EVAL_METHOD__; ;__DEC_EVAL_METHOD__;2;__FLT_RADIX__;2;__FLT_MANT_DIG__;24;__FLT_DIG__;6;__FLT_MIN_EXP__;(-125);__FLT_MIN_10_EXP__;(-37);__FLT_MAX_EXP__;128;__FLT_MAX_10_EXP__;38;__FLT_DECIMAL_DIG__;9;__FLT_MAX__;3.40282346638528859812e+38F;__FLT_MIN__;1.17549435082228750797e-38F;__FLT_EPSILON__;1.19209289550781250000e-7F;__FLT_DENORM_MIN__;1.40129846432481707092e-45F;__FLT_HAS_DENORM__;1;__FLT_HAS_INFINITY__;1;__FLT_HAS_QUIET_NAN__;1;__DBL_MANT_DIG__;53;__DBL_DIG__;15;__DBL_MIN_EXP__;(-1021);__DBL_MIN_10_EXP__;(-307);__DBL_MAX_EXP__;1024;__DBL_MAX_10_EXP__;308;__DBL_DECIMAL_DIG__;17;__DBL_MAX__;((double)1.79769313486231570815e+308L);__DBL_MIN__;((double)2.22507385850720138309e-308L);__DBL_EPSILON__;((double)2.22044604925031308085e-16L);__DBL_DENORM_MIN__;((double)4.94065645841246544177e-324L);__DBL_HAS_DENORM__;1;__DBL_HAS_INFINITY__;1;__DBL_HAS_QUIET_NAN__;1;__LDBL_MANT_DIG__;64;__LDBL_DIG__;18;__LDBL_MIN_EXP__;(-16381);__LDBL_MIN_10_EXP__;(-4931);__LDBL_MAX_EXP__;16384;__LDBL_MAX_10_EXP__;4932;__DECIMAL_DIG__;21;__LDBL_MAX__;1.18973149535723176502e+4932L;__LDBL_MIN__;3.36210314311209350626e-4932L;__LDBL_EPSILON__;1.08420217248550443401e-19L;__LDBL_DENORM_MIN__;3.64519953188247460253e-4951L;__LDBL_HAS_DENORM__;1;__LDBL_HAS_INFINITY__;1;__LDBL_HAS_QUIET_NAN__;1;__DEC32_MANT_DIG__;7;__DEC32_MIN_EXP__;(-94);__DEC32_MAX_EXP__;97;__DEC32_MIN__;1E-95DF;__DEC32_MAX__;9.999999E96DF;__DEC32_EPSILON__;1E-6DF;__DEC32_SUBNORMAL_MIN__;0.000001E-95DF;__DEC64_MANT_DIG__;16;__DEC64_MIN_EXP__;(-382);__DEC64_MAX_EXP__;385;__DEC64_MIN__;1E-383DD;__DEC64_MAX__;9.999999999999999E384DD;__DEC64_EPSILON__;1E-15DD;__DEC64_SUBNORMAL_MIN__;0.000000000000001E-383DD;__DEC128_MANT_DIG__;34;__DEC128_MIN_EXP__;(-6142);__DEC128_MAX_EXP__;6145;__DEC128_MIN__;1E-6143DL;__DEC128_MAX__;9.999999999999999999999999999999999E6144DL;__DEC128_EPSILON__;1E-33DL;__DEC128_SUBNORMAL_MIN__;0.000000000000000000000000000000001E-6143DL;__REGISTER_PREFIX__; ;__USER_LABEL_PREFIX__; ;__GNUC_STDC_INLINE__;1;__NO_INLINE__;1;__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1;1;__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2;1;__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4;1;__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8;1;__GCC_ATOMIC_BOOL_LOCK_FREE;2;__GCC_ATOMIC_CHAR_LOCK_FREE;2;__GCC_ATOMIC_CHAR16_T_LOCK_FREE;2;__GCC_ATOMIC_CHAR32_T_LOCK_FREE;2;__GCC_ATOMIC_WCHAR_T_LOCK_FREE;2;__GCC_ATOMIC_SHORT_LOCK_FREE;2;__GCC_ATOMIC_INT_LOCK_FREE;2;__GCC_ATOMIC_LONG_LOCK_FREE;2;__GCC_ATOMIC_LLONG_LOCK_FREE;2;__GCC_ATOMIC_TEST_AND_SET_TRUEVAL;1;__GCC_ATOMIC_POINTER_LOCK_FREE;2;__GCC_HAVE_DWARF2_CFI_ASM;1;__PRAGMA_REDEFINE_EXTNAME;1;__SSP_STRONG__;3;__SIZEOF_INT128__;16;__SIZEOF_WCHAR_T__;4;__SIZEOF_WINT_T__;4;__SIZEOF_PTRDIFF_T__;8;__amd64;1;__amd64__;1;__x86_64;1;__x86_64__;1;__SIZEOF_FLOAT80__;16;__SIZEOF_FLOAT128__;16;__ATOMIC_HLE_ACQUIRE;65536;__ATOMIC_HLE_RELEASE;131072;__k8;1;__k8__;1;__code_model_small__;1;__MMX__;1;__SSE__;1;__SSE2__;1;__FXSR__;1;__SSE_MATH__;1;__SSE2_MATH__;1;__gnu_linux__;1;__linux;1;__linux__;1;linux;1;__unix;1;__unix__;1;unix;1;__ELF__;1;__DECIMAL_BID_FORMAT__;1;_STDC_PREDEF_H;1;__STDC_IEC_559__;1;__STDC_IEC_559_COMPLEX__;1;__STDC_ISO_10646__;201505L;__STDC_NO_THREADS__;1\" "
 `#//C compiler system include directories` \
 #CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_EXTRA_GENERATOR_C_SYSTEM_INCLUDE_DIRS:INTERNAL=\"/usr/lib/gcc/x86_64-linux-gnu/5/include;/usr/local/include;/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed;/usr/include/x86_64-linux-gnu;/usr/include\" "
-
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_MAKE_PROGRAM-ADVANCED:INTERNAL=1 "
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCOMPILER_RT_HAS_FFREESTANDING_FLAG:INTERNAL=1 "
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCOMPILER_RT_HAS_XRAY_COMPILER_FLAG:INTERNAL=False "
@@ -157,57 +191,26 @@ CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_BUILD_TYPE:STRING=\"Debug\" "
 CMAKE_COMMAND=$CMAKE_COMMAND:"-G \"$PROJECT_TYPE\" "
 CMAKE_COMMAND=$CMAKE_COMMAND:"$WORKING_PATH/$RELATIVE_SOURCE_PATH"
 
-	fi;
+fi;
 $CMAKE_COMMAND;
 
-										else
-											echo "Have not entered destination. Operation failed."
-										fi;
-#									else		
-#										echo "Provide \$DOXYGEN_EXECUTABLE from argument 7, please."
-#									fi;
-#	
-#								else
-#									echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself) from argument 6, please."
-#								fi;
-								else                                                        
-									echo "Provide \$PROJECT_TYPE from argument 9."      
-								fi;                                                        
- 								else                                                        
-									echo "Provide \$MAKE_PROGRAM from argument 8."      
-								fi;                                                        
-
-								else
-									echo "Provide \$ATOMIC_PATH from argument 7."
-								fi;
-	
-							else
-								echo "Provide \$CLANG_MAIN_VERSION from argument 6."
-							fi;
-						else
-							echo "Compiler type unkown, please check it again."
-						fi;
-					else
-						echo "Provide \$COMPILER_SWITCH (e.g.: \"gcc\" or \"clang\") from argument 5, please."
-					fi;
-				else
-					echo "Provide \$INSTALL_PATH_PREFIX from argument 4 (e.g.: \"install\"), please."
-				fi;
-			else
-				echo "Provide \$BUILD_PATH_PREFIX from argument 3 (e.g.: \"build\"), please."
-			fi;
-		else
-		    echo "Provide \$RELATIVE_SOURCE_PATH from argument 2 (e.g.: \"llvm\"), please."
-
-		fi;
-	else
-	    echo "Provide \$CMAKE from argument 1, please."
-
-	fi;
 else
-    echo "Export \$WORKING_PATH first."
-
+	echo "Have not entered destination. Operation failed."
 fi;
+
+                                                      
+                                                       
+
+
+	
+
+
+
+
+
+
+
+
 #    done < "$file"
 #done
 

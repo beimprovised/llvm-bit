@@ -58,30 +58,30 @@ if [ "$INSTALL_PATH_PREFIX" = "" ] ; then
 fi;
 CC=""
 CPP=""
-if [ "$COMPILER_SWITCH" = "" ]; then
-    echo "Provide \$COMPILER_SWITCH (e.g.: \"gcc\" or \"clang\"), please."
-    exit 6;
-fi;
+#if [ "$COMPILER_SWITCH" = "" ]; then
+#    echo "Provide \$COMPILER_SWITCH (e.g.: \"gcc\" or \"clang\"), please."
+#    exit 6;
+#fi;
 if [[ ( "$CC" = "" ) || ( "$CPP" != "" ) ]]; then
     echo "Compiler type unkown, please check it again."
-    exit 7;
+    exit 6;
 fi;
 
 if [ "$CLANG_MAIN_VERSION" = "" ]; then
     echo "Provide \$CLANG_MAIN_VERSION."
-    exit 8;
+    exit 7;
 fi;
 if [ "$ATOMIC_PATH" = "" ]; then
     echo "Provide \$ATOMIC_PATH."
-    exit 9;
+    exit 8;
 fi;
 if [ "$MAKE_PROGRAM" = "" ]; then 
     echo "Provide \$MAKE_PROGRAM."      
-    exit 10;
+    exit 9;
 fi; 
 if [ "$PROJECT_TYPE" = "" ]; then 
     echo "Provide \$PROJECT_TYPE."      
-    exit 11;	
+    exit 10;	
 fi;    
 #	if [ "$DOXYGEN_DOT_EXECUTABLE" = "" ] ; then
 #		echo "Provide \$DOXYGEN_DOT_EXECUTABLE (just dot, not doxygen itself), please."
@@ -104,8 +104,8 @@ if [ "$PWD" = "$WORKING_PATH/$BUILD_PATH_PREFIX-$RELATIVE_SOURCE_PATH" ]; then
 
 if [ "$LLVM_ENABLE_LIBCXX" = "ON" ]; then
 	LIBCXX_PREFIX=""
-	CC="$INSTALL_ROOT/bin/gcc"
-	CPP="$INSTALL_ROOT/bin/g++"
+#	CC="$INSTALL_ROOT/bin/gcc"
+#	CPP="$INSTALL_ROOT/bin/g++"
 
 CMAKE_COMMAND="$CMAKE -G $PROJECT_TYPE $WORKING_PATH/$RELATIVE_SOURCE_PATH "
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH "
@@ -138,8 +138,8 @@ CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_ASM_FLAGS_DEBUG:STRING=-g "
 
 else
 	LIBCXX_PREFIX="std"
-	CC="$INSTALL_ROOT/bin/clang"
-	CPP="$INSTALL_ROOT/bin/clang++"
+#	CC="$INSTALL_ROOT/bin/clang"
+#	CPP="$INSTALL_ROOT/bin/clang++"
 
 CMAKE_COMMAND="$CMAKE  -DCMAKE_INSTALL_PREFIX:PATH=\"$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH\" "	#$CMAKE -DCMAKE_INSTALL_PREFIX:PATH=$WORKING_PATH/$INSTALL_PATH_PREFIX-$RELATIVE_SOURCE_PATH \
 CMAKE_COMMAND=$CMAKE_COMMAND:"-DCMAKE_MAKE_PROGRAM:FILEPATH=\"$MAKE_PROGRAM\" "

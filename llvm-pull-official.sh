@@ -174,7 +174,7 @@ if ! [ "$WORKING_PATH"  = "" ]; then
 			git svn rebase -l
 		fi;
 	fi;
-:'
+: '
 	cd "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects"
 	echo "pull libcxx ..."
 	if [ ! -d "$WORKING_PATH/$LLVM_SOURCE_ROOT/projects/libcxx" ]; then
